@@ -1,12 +1,12 @@
 <template>
   <div class="commend">
-    <!--<swiper :options="swiperOption" ref="mySwiperA">-->
-      <!--<swiper-slide v-for="src in imgSrc" :key="src.pic">-->
-        <!--<img class="banner" :src="src.pic" :alt="src.typeTitle">-->
-      <!--</swiper-slide>-->
-      <!--<div class="swiper-pagination" slot="pagination"></div>-->
-      <!--<div class="swiper-scrollbar"  slot="scrollbar"></div>-->
-    <!--</swiper>-->
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="src in imgSrc" :key="src.pic">
+          <img class="banner" :src="src.pic" :alt="src.typeTitle">
+        </div>
+      </div>
+    </div>
     <div class="recmdList">
       <header>
         <p class="header">推荐歌单</p>
@@ -40,10 +40,8 @@
 <script>
   import Vue from 'vue'
   import {getBannerImg,getRecmdList,getNewSong} from '@/service/getData'
-//  import VueAwesomeSwiper from 'vue-awesome-swiper'
   import typeLoading from '@/components/loading'
 
-//  Vue.use(VueAwesomeSwiper)
   export default{
     data(){
       return {
@@ -51,44 +49,27 @@
         recommend:[],
         newSong:[],
         loading:true,
-        swiperOption: {
-          // 所有配置均为可选（同Swiper配置）
-          autoplay: 3000,
-          notNextTick: true,
-          speed: 500,
-          loop: true,
-          grabCursor : true,
-          setWrapperSize :true,
-//          autoHeight: true,
-          pagination : '.swiper-pagination',
-          paginationClickable :true,
-          prevButton:'.swiper-button-prev',
-          nextButton:'.swiper-button-next',
-          scrollbar:'.swiper-scrollbar',
-          mousewheelControl : true,
-          autoplayDisableOnInteraction : false,
-          observer:true,
-          observeParents:true,
-          onTransitionStart(swiper){
-//            console.log(swiper)
-          }
-        }
       }
     },
     components:{
       typeLoading
     },
     computed:{
-      swiper() {
-//        return this.$refs.mySwiperA.swiper
-      },
-
     },
     created(){
-      this.initData();
+
     },
     mounted() {
-
+      this.initData();
+      var mySwiper = new Swiper('.swiper-container', {
+        autoplay: 3000,//可选选项，自动滑动
+        paginationClickable: true,
+        speed: 500,
+        loop: true,
+        observer:true,
+        observeParents:true,
+        autoplayDisableOnInteraction : false,
+      })
     },
     methods:{
       async initData(){
@@ -109,7 +90,6 @@
   }
 </script>
 <style lang="scss">
-
   .recmdList{
     .header{
       padding-left: 10px;
