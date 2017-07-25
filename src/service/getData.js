@@ -26,6 +26,17 @@ export const getNewSong = () => fetch('/personalized/djprogram')
 * 获取歌单详情
 * */
 export const getRecomdDetails = (id) => fetch('/playlist/detail',{
-  id:id,
-  // limit:30
+  id:id
+})
+/*
+* 获取歌曲详情
+* */
+export const getSongDetails = (id) => fetch('/song/detail',{
+  ids:id
+})
+/*
+* 获取歌曲url
+* */
+export const getSongUrl = (id) => fetch('/music/url',{
+  id:id
 })

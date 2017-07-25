@@ -20,6 +20,7 @@ const MusicList = r => require.ensure([], () => r(require('@/pages/home/children
 const RadioStation = r => require.ensure([], () => r(require('@/pages/home/children/radiostation')), 'radiostation')
 const Scoreboard = r => require.ensure([], () => r(require('@/pages/home/children/Scoreboard')), 'Scoreboard')
 const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/children/playlistdetail')), 'playlistdetail')
+const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
 
 
 
@@ -67,6 +68,11 @@ var router =  new Router({
       path:'/playlist/detail',
       name:'playlistdetail',
       component:playListDetail,
+    },
+    {
+      path:'/playmusic',
+      name:'playMusic',
+      component:playMusic
     },
     {
       path: '*',

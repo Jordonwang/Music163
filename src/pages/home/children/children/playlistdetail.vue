@@ -8,13 +8,36 @@
     <div class="desc">
       <img :src="playlist.coverImgUrl" alt="playlist.description" width="30%">
       <p>{{playlist.name}}</p>
+      <p>标签:<span v-for="val in playlist.tags">{{val}},</span></p>
     </div>
-
-    <p v-text="playlist.description"></p>
-    <ul>
+    <div class="count">
+      <ul>
+        <li>
+          <img src="/static/music.png" alt="添加收藏">
+          <span>{{playlist.subscribedCount}}</span>
+        </li>
+        <li>
+          <img src="/static/music.png" alt="评论">
+          <span>{{playlist.commentCount}}</span>
+        </li>
+        <li>
+          <img src="/static/music.png" alt="转发">
+          <span>{{playlist.shareCount}}</span>
+        </li>
+        <li>
+          <img src="/static/music.png" alt="下载">
+          <span>下载</span>
+        </li>
+      </ul>
+    </div>
+    <ul class="main">
+      <li>播放全部(共{{playlist.trackCount}}首)</li>
       <li v-for="(list,index) in playlist.tracks" :keys="index">
         <span>{{index+1}}</span>
-        <p>{{list.name}}</p>
+        <router-link :to="{path:'/playmusic',query:{id:list.al.id}}">
+          <p>{{list.name}}</p>
+          <p>{{list.ar[0].name}}</p>
+        </router-link>
       </li>
     </ul>
     {{loading}}
@@ -63,22 +86,25 @@
         this.getRecomdDetails(this.ids);
       },
       watch:{
-//        '$route':function (to) {
-//            console.log(to)
-//          if(to.path=='/playlist/detail'){
-//            this.playlist=[];
-//            this.loading=true;
-//            this.getRecomdDetails(this.ids);
-//          }
-//        }
+       '$route':function (to) {
+           console.log(to)
+         if(to.path=='/playlist/detail'){
+           this.playlist=[];
+           this.loading=true;
+           this.getRecomdDetails(this.ids);
+         }
+       }
       }
     }
 </script>
-<style>
+<style scoped>
   header{
     text-align: center;
     height:30px;
     line-height: 30px;
+    color: #ffffff;
+    position: fixed;
+    width: 100%;
   }
   header>a{
     position: absolute;
@@ -94,8 +120,8 @@
     display: block;
     width:10px;
     height:10px;
-    border-right: 1px solid #000;
-    border-top: 1px solid #000;
+    border-right: 1px solid #fff;
+    border-top: 1px solid #fff;
     transform:rotate(225deg);
     margin-top: 5px;
     margin-left: 5px;
@@ -104,10 +130,13 @@
     position: fixed;
     z-index:-1;
     filter: blur(50px);
+    width: 100%
   }
   .desc{
     overflow: auto;
     padding:15px;
+    color: #ffffff;
+    padding-top: 45px;
   }
   .desc>img{
     float: left;
@@ -115,5 +144,54 @@
   .desc>p{
     width: 66%;
     float: right;
+  }
+  .count{
+    padding-bottom: 3px;
+    color: #ffffff;
+  }
+  .count>ul{
+    display: flex;
+    align-items: center;
+    list-style: none;
+  }
+  .count>ul>li{
+    text-align: center;
+  }
+  .count>ul>li>img{
+    width: 25%
+  }
+  .count>ul>li>span{
+    display: block;
+    font-size: 13px;
+  }
+  .main{
+    background:#ffffff;
+    padding:10px;
+    overflow: auto
+  }
+  .main>li{
+    height: 40px;
+    line-height: 40px;
+    padding-bottom: 3px
+  }
+  .main>li span{
+    width: 10%;
+    float: left;
+    text-align: center;
+  }
+  .main>li>a{
+    display: block;
+    color: #000000;
+    text-decoration: none;
+    width: 89%;
+    float: right;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+  }
+  .main>li p:last-child{
+    font-size: 13px;
+    color: #adadad;
+    border-bottom: 1px solid #E6E6E6
   }
 </style>
