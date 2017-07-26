@@ -43,6 +43,6 @@ export const getSongUrl = (id) => fetch('/music/url',{
 /*
  * 获取歌词
  * */
-export const getSonglyric = (id) => fetch('/music/url',{
+export const getSonglyric = (id) => fetch('/lyric',{
   id:id
 })
