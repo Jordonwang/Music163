@@ -40,3 +40,9 @@ export const getSongDetails = (id) => fetch('/song/detail',{
 export const getSongUrl = (id) => fetch('/music/url',{
   id:id
 })
+/*
+ * 获取歌词
+ * */
+export const getSonglyric = (id) => fetch('/music/url',{
+  id:id
+})

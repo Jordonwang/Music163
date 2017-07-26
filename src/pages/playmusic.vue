@@ -1,13 +1,16 @@
 <template>
 	<div>
-
+    <header>
+      <a @click="goBack" href="javascript:void(0)"></a>
+      <span>歌单</span>
+    </header>
 	<p>songID: {{songID}}</p>
     <audio autoplay controls="controls" :src="src"></audio>
 	<type-loading v-if="loading"></type-loading>
 	</div>
 </template>
 <script>
-	import {getSongDetails,getSongUrl} from '@/service/getData'
+	import {getSongUrl,getSonglyric} from '@/service/getData'
   import typeLoading from '@/components/loading'
 
 	export default{
@@ -33,6 +36,7 @@
     methods:{
       async initData(id){
         let songUrl = await getSongUrl(id)
+        let songlyric = await getSonglyric(id)
         this.src = songUrl.data[0].url
         this.hideLoading();
       },

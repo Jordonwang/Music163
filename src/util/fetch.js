@@ -1,82 +1,51 @@
-/**
- * Created by Administrator on 2017/7/19 0019.
+import axios from './http'
+
+/*
+ axios#request(config)
+ axios#get(url[, config])
+ axios#delete(url[, config])
+ axios#head(url[, config])
+ axios#options(url[, config])
+ axios#post(url[, data[, config]])
+ axios#put(url[, data[, config]])
+ axios#patch(url[, data[, config]])
  */
-import {
-  baseUrl
-} from '../config/env'
 
-export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
-  type = type.toUpperCase();
-  url = baseUrl + url;
+export default async(url = '', data = {}, type = 'GET') => {
+  type = type.toLowerCase();
+  //url = baseUrl + url;
 
-  if (type == 'GET') {
-    let dataStr = ''; //数据拼接字符串
-    Object.keys(data).forEach(key => {
-      dataStr += key + '=' + data[key] + '&';
+  return new Promise((resolve, reject) => {
+    var request = null
+    if(type == 'post' || type == 'put' || type == 'patch'){
+      request = axios({
+        method: type,
+        url: url,
+        data: data
+      });
+    }else {
+      request = axios({
+        method: type,
+        url: url,
+        params: data
+      });
+    }
+
+    request.then(response =>{
+      // loading
+      // 如果http状态码正常，则直接返回数据
+      if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
+        resolve(response.data);
+      }
+      // 异常状态下，把错误信息返回去
+      resolve({
+        status: -404,
+        msg: '网络异常'
+      });
+    }, err => {
+      reject(err);
+    }).catch((error) => {
+      reject(error)
     })
-
-    if (dataStr !== '') {
-      dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
-      url = url + '?' + dataStr;
-    }
-  }
-
-  if (window.fetch && method == 'fetch') {
-    let requestConfig = {
-      credentials: 'include',
-      method: type,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: "cors",
-      cache: "force-cache"
-    }
-
-    if (type == 'POST') {
-      Object.defineProperty(requestConfig, 'body', {
-        value: JSON.stringify(data)
-      })
-    }
-
-    try {
-      const response = await fetch(url, requestConfig);
-      const responseJson = await response.json();
-      return responseJson
-    } catch (error) {
-      throw new Error(error)
-    }
-  } else {
-    return new Promise((resolve, reject) => {
-      let requestObj;
-      if (window.XMLHttpRequest) {
-        requestObj = new XMLHttpRequest();
-      } else {
-        requestObj = new ActiveXObject;
-      }
-
-      let sendData = '';
-      if (type == 'POST') {
-        sendData = JSON.stringify(data);
-      }
-
-      requestObj.open(type, url, true);
-      requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      requestObj.send(sendData);
-
-      requestObj.onreadystatechange = () => {
-        if (requestObj.readyState == 4) {
-          if (requestObj.status == 200) {
-            let obj = requestObj.response
-            if (typeof obj !== 'object') {
-              obj = JSON.parse(obj);
-            }
-            resolve(obj)
-          } else {
-            reject(requestObj)
-          }
-        }
-      }
-    })
-  }
+  })
 }
