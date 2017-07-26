@@ -9,50 +9,61 @@
       <div class="songPic">
         <div class="outpic">
           <div class="innerpic">
-            <div>
-              <img :src="songDetail.songs[0].al.picUrl" alt="">
-            </div>
+              <img @click="isplay" :src="songDetail.songs[0].al.picUrl" alt="">
           </div>
         </div>
       </div>
       <div class="more"></div>
-      <div class="process"></div>
+      <div class="process">
+      	<span>{{time.start}}</span>
+      	<div><span id="process"></span></div>
+      	<span>{{time.end}}</span>
+      </div>
       <div class="setting"></div>
+      <span></span>
     </div>
-    <!--<audio autoplay controls="controls" :src="src" ></audio>-->
+    <audio id="audio" autoplay :src="src" @timeupdate="initProcess"></audio>
 	<type-loading v-if="loading"></type-loading>
 	</div>
 </template>
 <script>
-  import route from '@/router'
+  	import route from '@/router'
 	import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
-  import typeLoading from '@/components/loading'
+  	import typeLoading from '@/components/loading'
 
-	export default{
-		data(){
-			return {
-				loading:true,
-				songID:'',
-        src:'',
-        songDetail:{
-          songs:[{'al':{'picUrl':''}}]
-        }
-			}
-		},
-		computed:{
-      id:function () {
-        return this.$route.query.id
-      }
+export default{
+	data(){
+		return {
+			loading:true,
+			songID:'',
+	        src:'',
+	        audio:false,
+	        isPlaying:true,
+	        songDetail:{
+	          songs:[{'al':{'picUrl':''}}]
+	        },
+	        time:{
+	        	start:'00:00',
+	        	end:'00:00'
+	        }
+		}
+	},
+	computed:{
+	  id:function () {
+	    return this.$route.query.id
+	  }
     },
     components:{
       typeLoading
     },
     mounted(){
-      this.id = this.$route.query.id;
       this.initData(this.id);
+      var _this = this;
       var outpicWidth = document.querySelector('.outpic').clientWidth
       document.querySelector('.outpic').style.height = outpicWidth + 'px'
-      console.log(outpicWidth)
+      // setInterval(function () {
+      // 	_this.initProcess()
+      // },1000)
     },
     methods:{
       goBack(){
@@ -68,6 +79,45 @@
       },
       hideLoading(){
         this.loading = false;
+      },
+      isplay(){
+      	var audio = document.querySelector('#audio');
+      	var play = document.querySelector('.main').lastChild;
+      	var img = document.querySelector('.innerpic').lastChild
+      	if (this.isPlaying) {
+      		this.isPlaying = !this.isPlaying
+      		play.setAttribute('class','play')
+      		img.setAttribute('class','stop')
+      		audio.pause()
+      	}else{
+      		this.isPlaying = !this.isPlaying
+      		play.removeAttribute('class')
+      		img.setAttribute('class','start')
+      		audio.play()
+      	}
+      },
+      initProcess(){
+      	var audio = document.querySelector('#audio');
+      	var proces = document.querySelector('#process');
+      	var time = parseInt(audio.currentTime);
+      	var timeLength = audio.duration;
+      	if(time == timeLength){
+      		isplay()
+      	}
+		proces.style.width = (time/timeLength) * 100 +'%' 
+      	this.time.start = this.changeTime(time);
+        this.time.end = this.changeTime(timeLength);
+      },
+      changeTime(time){
+      	  var minute = parseInt(time / 60);
+		  if (minute < 10) {
+		    minute = '0' + minute;
+		  }
+		  var secound = parseInt(time % 60);
+		  if (secound < 10) {
+		    secound = '0' + secound;
+		  }
+		  return minute + ':' + secound;
       }
     },
     watch:{
@@ -81,9 +131,9 @@
          }
        }
     }
-	}
+}
 </script>
-<style>
+<style scoped>
   header{
     text-align: center;
     height:40px;
@@ -128,8 +178,7 @@
     position: relative;
     margin-top: 100px;
   }
-  .main:after{
-    content: '';
+  .main>span{
     display: block;
     background: url("/static/needle-ip6.png");
     background-size: 100% 100%;
@@ -138,20 +187,34 @@
     position: absolute;
     top:-68px;
     left: 45%;
-    /*transform: rotate(-45deg);*/
-    /*transform-origin:left 18px;*/
+    transition:all .3s
+  }
+  .main>.play{
+  	transform: rotate(-45deg);
+    transform-origin:left 18px;
   }
   .main>.songPic>.outpic>.innerpic img{
     width:100%;
+    animation: play 8s infinite linear
+  }
+  .main>.songPic>.outpic>.innerpic img.stop{
+  	animation-play-state: paused;
+  }
+  .main>.songPic>.outpic>.innerpic img.start{
+  	animation-play-state: running;
+  }
+  @keyframes play {
+  	100%{
+  		transform: rotate(360deg);
+  	}
   }
   .main>.songPic>.outpic>.innerpic{
     text-align: center;
     border-radius: 50%;
     overflow: hidden;
-    width: 182px;
-    height: 182px;
+    width: 60%;
+    height: 60%;
     margin: 0 auto;
-    margin-top: 60px;
   }
   .main>.songPic>.outpic{
     margin: 30px;
@@ -160,5 +223,27 @@
     background-repeat: no-repeat;
     overflow: hidden;
     zoom: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .process{
+  	display: flex;
+  	height: 10px;
+  	line-height: 10px;
+  	justify-content: center;
+  	align-items: center;
+  }
+  .process>div{
+  	width: 70%;
+  	height: 2px;
+  	background:#ccc ;
+  	margin: 0 10px
+  }
+  .process>div>span{
+  	height: 100%;
+  	display: block;
+  	width: 0px;
+  	background: #000
   }
 </style>

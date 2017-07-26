@@ -69,6 +69,13 @@
         observeParents:true,
         autoplayDisableOnInteraction : false,
       })
+      var cookie = document.cookie;
+      console.log(cookie)
+      if(cookie == -1){
+        console.log('未登录')
+      }else{
+        console.log('已登录')
+      }
     },
     methods:{
       async initData(){
