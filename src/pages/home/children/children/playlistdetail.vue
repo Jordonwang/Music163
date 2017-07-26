@@ -32,15 +32,19 @@
     </div>
     <ul class="main">
       <li>播放全部(共{{playlist.trackCount}}首)</li>
+
+
       <li v-for="(list,index) in playlist.tracks" :keys="index">
-        <span>{{index+1}}</span>
-        <router-link :to="{path:'/playmusic',query:{id:list.al.id}}">
-          <p>{{list.name}}</p>
-          <p>{{list.ar[0].name}}</p>
+        <router-link :to="{path:'/playmusic',query:{id:list.id}}">
+          <span>{{index+1}}</span>
+          <div>
+            <p>{{list.name}}</p>
+            <p>{{list.ar[0].name}}</p>
+          </div>
         </router-link>
       </li>
+
     </ul>
-    {{loading}}
     <type-loading v-if="loading"></type-loading>
   </div>
 </template>
@@ -55,6 +59,7 @@
           id:'',
           playlist:{
 //            coverImgUrl:''
+            songID:[]
           },
           loading:true,
         }
@@ -77,6 +82,7 @@
         async getRecomdDetails(id){
           let recomdDetails = await getRecomdDetails(id)
           this.playlist = recomdDetails.playlist;
+          this.playlist.songID = recomdDetails.playlist.trackIds
           document.getElementById('bg').src = recomdDetails.playlist.coverImgUrl;
           this.loading=false
         }
@@ -183,13 +189,17 @@
     display: block;
     color: #000000;
     text-decoration: none;
-    width: 89%;
+    width: 100%;
     float: right;
-    height: 20px;
-    line-height: 20px;
+    height: 40px;
+    line-height: 40px;
     font-size: 15px;
   }
-  .main>li p:last-child{
+  .main>li>a>div>p{
+    height:20px;
+    line-height:20px;
+  }
+  .main>li>a>div>p:last-child{
     font-size: 13px;
     color: #adadad;
     border-bottom: 1px solid #E6E6E6
