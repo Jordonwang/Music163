@@ -96,6 +96,9 @@
   }
 </script>
 <style lang="scss">
+  .recmdList:nth-last-child(1){
+    padding-bottom: 65px;
+  }
   .recmdList{
     .header{
       padding-left: 10px;
@@ -115,7 +118,7 @@
           width:100%;
         }
         p{
-          height: 40px;
+          height: 45px;
           overflow: hidden;
         }
       }
