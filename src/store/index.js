@@ -4,18 +4,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import mutations from './mutations'
-import info from './modules/info'
+import getters from './getters'
+import actions from './actions'
+
+
 
 Vue.use(Vuex)
 
-const state ={
-    data:0,
+const state = {
+  data:0,
+  songSrc:'',
+  playingSongId:'',
+  songName:'',
+  songImg:'',
+  startTime:'00:00',
+  totalTime:'00:00',
+  isPlaying:false
 }
 
 export default new Vuex.Store({
   state,
+  getters,
+  actions,
   mutations,
-  modules:{
-    info
-  }
 })

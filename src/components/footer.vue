@@ -60,7 +60,7 @@
         font-size: 12px;
         text-align: center;
         img{
-          width:30%
+          width:20%
         }
         span{
           display:block

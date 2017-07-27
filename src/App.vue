@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <audio id="audio" autoplay :src="songSrc" @timeupdate="initProcess"></audio>
       <transition name="router-fade" mode="out-in">
         <keep-alive>
           <router-view></router-view>
@@ -10,33 +11,30 @@
 
 <script>
   import store from './store'
-//  import {mapState, mapMutations} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
 export default {
   name: 'app',
   data(){
       return {
-          msgOne:'msg',
-          menus: [
-            {id: 1, path: '/home', name: 'home', title: '首页'},
-            {id: 2, path: '/about', name: 'about', title: '关于'},
-            {id: 3, path: '/service', name: 'service', title: '服务'},
-            {id: 4, path: '/hello', name: 'hello', title: '测试'}
-          ],
-        transitionName:""
       }
   },
   computed:{
-      add(){
-          return store.state.data
-      }
+      ...mapState(['songSrc','startTime','totalTime'])
+  },
+  mounted(){
   },
   methods:{
-      addnum(){
-        store.commit('ADD_NUM')
-      },
-      reducenum(){
-          store.commit('REDUCE_NUM',100)
-      }
+    ...mapMutations([
+      'UPDATE_STARTTIME',
+      'UPDATE_TOTALTIME'
+    ]),
+    initProcess(){
+      var audio = document.querySelector('#audio');
+      var time = parseInt(audio.currentTime);
+      var timeLength = parseInt(audio.duration);
+      this.UPDATE_STARTTIME(time)
+      this.UPDATE_TOTALTIME(timeLength)
+    }
   },
   //监听路由的路径，可以通过不同的路径去选择不同的切换效果
   watch: {

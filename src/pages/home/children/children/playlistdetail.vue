@@ -57,10 +57,7 @@
       data(){
         return{
           id:'',
-          playlist:{
-//            coverImgUrl:''
-            songID:[]
-          },
+          playlist:{},
           loading:true,
         }
       },
@@ -93,7 +90,6 @@
       },
       watch:{
        '$route':function (to) {
-           console.log(to)
          if(to.path=='/playlist/detail'){
            this.playlist=[];
            this.loading=true;

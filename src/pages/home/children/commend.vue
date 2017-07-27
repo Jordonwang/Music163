@@ -33,6 +33,7 @@
         </ul>
       </header>
     </div>
+    <div class="paddingbtm"></div>
     <type-loading v-if="loading"></type-loading>
   </div>
 </template>
@@ -56,9 +57,10 @@
     computed:{
     },
     created(){
-
+      console.log('created')
     },
     mounted() {
+      console.log('mounted')
       this.initData();
       var mySwiper = new Swiper('.swiper-container', {
         autoplay: 3000,//可选选项，自动滑动
@@ -96,6 +98,9 @@
   }
 </script>
 <style lang="scss">
+  .paddingbtm{
+    padding-bottom: 50px;
+  }
   .recmdList{
     .header{
       padding-left: 10px;
@@ -115,7 +120,14 @@
           width:100%;
         }
         p{
-          height: 40px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          position: relative;
+          height:2.8em;
+          line-height: 1.4em;
           overflow: hidden;
         }
       }

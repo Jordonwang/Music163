@@ -15,14 +15,12 @@ const Home = r => require.ensure([], () => r(require('@/pages/home/home')), 'hom
 const Friends = r => require.ensure([], () => r(require('@/pages/friends/friends')), 'friends')
 const MyMusic = r => require.ensure([], () => r(require('@/pages/mymusic/mymusic')), 'mymusic')
 const MyCount = r => require.ensure([], () => r(require('@/pages/mycount/mycount')), 'mycount')
-const Commend = r => require.ensure([], () => r(require('@/pages/home/children/commend')), 'mycount')
+const Commend = r => require.ensure([], () => r(require('@/pages/home/children/commend')), 'commend')
 const MusicList = r => require.ensure([], () => r(require('@/pages/home/children/musiclist')), 'musiclist')
 const RadioStation = r => require.ensure([], () => r(require('@/pages/home/children/radiostation')), 'radiostation')
 const Scoreboard = r => require.ensure([], () => r(require('@/pages/home/children/Scoreboard')), 'Scoreboard')
 const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/children/playlistdetail')), 'playlistdetail')
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
-
-
 
 var router =  new Router({
   mode:routerMode,
@@ -30,7 +28,6 @@ var router =  new Router({
     {
       path: '/',
       redirect:'/home/commend'
-
     },
     {
       path: '/home',
