@@ -42,7 +42,7 @@
     display: flex;
     padding-left:0;
     width:100%;
-    background:rgba(16, 14, 14, 0.8);
+    background:rgba(16, 14, 14, 0.9);
     margin: 0px;
     max-width: 480px;
     margin: 0 auto;
