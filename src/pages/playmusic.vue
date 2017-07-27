@@ -27,7 +27,15 @@
       	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
       	<span>{{totalT}}</span>
       </div>
-      <div class="setting"></div>
+      <div class="setting">
+      	<ul>
+      		<li><img src="/static/orderloop.png" alt=""></li>
+      		<li><img src="/static/left-arrow.png" alt=""></li>
+      		<li><img src="/static/play.png" alt=""></li>
+      		<li><img src="/static/right-arrow.png" alt=""></li>
+      		<li><img src="/static/menu.png" alt=""></li>
+      	</ul>
+      </div>
       <img src="/static/cyc.png" alt="">
       <span></span>
     </div>
@@ -243,6 +251,9 @@
     background-size: contain;
     left: 35%;
   }
+  .main>.songPic{
+  	background: url('/static/disc_light-ip6.png');
+  }
   .main>.songPic>.outpic{
     margin: 30px;
     background: url("/static/disc.png");
@@ -278,7 +289,6 @@
   	width: 0px;
   	background: #168bf5;
     position: relative;
-    transition:all 0.5s;
   }
   .process>div>span>i{
     width: 14px;
@@ -300,6 +310,29 @@
     position: absolute;
     top:5px;
     left:5px;
-
+  }
+  .more{
+  	margin-top: 80px
+  }
+  .more>ul{
+  	display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 20px 50px;
+  }
+  .more>ul>li>img{
+  	width: 65%
+  }
+  .setting>ul{
+  	display: flex;
+    justify-content: space-around;
+    list-style: none;
+    position: fixed;
+    width: 100%;
+    bottom: 15px;
+    align-items: center;
+  }
+  .setting>ul>li>img{
+	width: 70%
   }
 </style>
