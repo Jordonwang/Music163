@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img id="bg" src="" alt="">
+    <img id="bg" :src="src" alt="">
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>歌单</span>
@@ -59,6 +59,7 @@
           id:'',
           playlist:{},
           loading:true,
+          src:''
         }
       },
       computed:{
@@ -74,13 +75,14 @@
       },
       methods:{
         goBack(){
-          route.goBack()
+            console.log('goBack')
+          this.$router.goBack(1)
         },
         async getRecomdDetails(id){
           let recomdDetails = await getRecomdDetails(id)
           this.playlist = recomdDetails.playlist;
           this.playlist.songID = recomdDetails.playlist.trackIds
-          document.getElementById('bg').src = recomdDetails.playlist.coverImgUrl;
+          this.src = recomdDetails.playlist.coverImgUrl;
           this.loading=false
         }
       },

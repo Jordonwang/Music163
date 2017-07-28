@@ -5,8 +5,9 @@ import {routerMode} from '../config/env'
 
 Vue.use(Router)
 
-Router.prototype.goBack = function () {
-  this.isBack = true
+Router.prototype.goBack = function (num) {
+  this.isBack = num
+  console.log('Router.prototype.goBack'+num)
   window.history.go(-1)
 }
 
@@ -21,13 +22,15 @@ const RadioStation = r => require.ensure([], () => r(require('@/pages/home/child
 const Scoreboard = r => require.ensure([], () => r(require('@/pages/home/children/Scoreboard')), 'Scoreboard')
 const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/children/playlistdetail')), 'playlistdetail')
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
+const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
 
 var router =  new Router({
   mode:routerMode,
   routes: [
     {
       path: '/',
-      redirect:'/home/commend'
+      redirect:'/home/commend',
+      component:pageTransition
     },
     {
       path: '/home',

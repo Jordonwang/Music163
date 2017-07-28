@@ -10,8 +10,10 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import store from './store'
   import {mapState, mapMutations} from 'vuex'
+
 export default {
   name: 'app',
   data(){
@@ -20,8 +22,6 @@ export default {
   },
   computed:{
       ...mapState(['songSrc','startTime','totalTime'])
-  },
-  mounted(){
   },
   methods:{
     ...mapMutations([
@@ -39,12 +39,18 @@ export default {
   //监听路由的路径，可以通过不同的路径去选择不同的切换效果
   watch: {
     '$route' (to, from) {
-      if(to.path == '/about'){
-          console.log(1)
-        this.transitionName = 'slide-right';
-      }else{
-        this.transitionName = 'slide-left';
-      }
+      const toDepth = to.path.split('/').length
+      const fromDepth = from.path.split('/').length
+      console.log(toDepth)
+      console.log(fromDepth)
+//      this.transitionName = toDepth < fromDepth ? 'fadeInLeft' : 'fade'
+//      if(to.path == "/myCount"){
+//        console.log(1)
+//
+//        this.transitionName = 'fades';
+//      }else{
+//        this.transitionName = 'fade';
+//      }
     }
   }
 }
@@ -59,7 +65,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
   color: #2c3e50;
   max-width: 480px;
   margin:0 auto;
@@ -81,16 +86,13 @@ export default {
   height: 100%;
   transition: all .5s cubic-bezier(.55,0,.1,1);
 }
-.slide-left-enter, .slide-right-leave-active {
-  opacity: 0;
-  -webkit-transform: translate(30px, 0);
-  transform: translate(30px, 0);
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0s
 }
-.slide-left-leave-active, .slide-right-enter {
-  opacity: 0;
-  -webkit-transform: translate(-30px, 0);
-  transform: translate(-30px, 0);
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
+
 .flexRowBetween{
   position: fixed;
   bottom:0;

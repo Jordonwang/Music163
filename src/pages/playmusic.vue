@@ -23,15 +23,15 @@
         </ul>
       </div>
       <div class="process">
-      	<span>{{startT}}</span>
+      	<span v-text="startT">00:00</span>
       	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
-      	<span>{{totalT}}</span>
+      	<span v-text="totalT">00:00</span>
       </div>
       <div class="setting">
       	<ul>
       		<li><img src="/static/orderloop.png" alt=""></li>
       		<li><img src="/static/left-arrow.png" alt=""></li>
-      		<li><img src="/static/play.png" alt=""></li>
+      		<li><img src="/static/pused.png" alt=""></li>
       		<li><img src="/static/right-arrow.png" alt=""></li>
       		<li><img src="/static/menu.png" alt=""></li>
       	</ul>
@@ -92,6 +92,7 @@
         'UPDATE_TOTALTIME'
       ]),
       goBack(){
+        route.isBack = 2
         route.goBack()
       },
       async initData(id){
@@ -251,9 +252,6 @@
     background-size: contain;
     left: 35%;
   }
-  .main>.songPic{
-  	background: url('/static/disc_light-ip6.png');
-  }
   .main>.songPic>.outpic{
     margin: 30px;
     background: url("/static/disc.png");
@@ -272,6 +270,7 @@
   	justify-content: center;
   	align-items: center;
     padding: 0 16px;
+    margin: 4% 0;
   }
   .process>span{
     font-size:12px;
@@ -312,7 +311,7 @@
     left:5px;
   }
   .more{
-  	margin-top: 80px
+  	margin-top: 13%
   }
   .more>ul{
   	display: flex;
@@ -320,8 +319,11 @@
     list-style: none;
     padding: 20px 50px;
   }
+  .more>ul>li{
+    text-align: center;
+  }
   .more>ul>li>img{
-  	width: 65%
+  	width: 45%
   }
   .setting>ul{
   	display: flex;
@@ -332,7 +334,10 @@
     bottom: 15px;
     align-items: center;
   }
+  .setting>ul>li{
+    text-align: center;
+  }
   .setting>ul>li>img{
-	width: 70%
+	  width: 45%
   }
 </style>
