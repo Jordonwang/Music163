@@ -32,7 +32,7 @@
       		<li><img src="/static/orderloop.png" alt=""></li>
       		<li><img src="/static/left-arrow.png" alt=""></li>
       		<li><img src="/static/pused.png" alt=""></li>
-      		<li><img src="/static/right-arrow.png" alt=""></li>
+      		<li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
       		<li><img src="/static/menu.png" alt=""></li>
       	</ul>
       </div>
@@ -59,7 +59,7 @@
       }
     },
     computed:{
-      ...mapState(['playingSongId','songSrc','songName','songImg','startTime','totalTime','playingSongId']),
+      ...mapState(['playingSongId','songSrc','songName','songImg','startTime','totalTime','playingSongId','songlist','currentSongListIndex']),
       id () {
         return this.$route.query.id
       },
@@ -81,6 +81,14 @@
       var outpicWidth = document.querySelector('.outpic').clientWidth
       document.querySelector('.outpic').style.height = outpicWidth + 'px'
       this.hideLoading();
+      for (var i = 0;i<this.songlist.length;i++) {
+      	console.log(this.songlist[i].id)
+      	if(this.id == this.songlist[i].id){
+      		console.log(i)
+      		this.UPDATE_CURRENTSONGLISTINDEX(i)
+      		console.log(this.songlist.indexof(this.songlist[i].id))
+      	}
+      }
     },
     methods:{
       ...mapMutations([
@@ -89,9 +97,11 @@
         'UPDATE_PLAYINGSONGIMG',
         'UPDATE_PLAYINGSONGNAME',
         'UPDATE_STARTTIME',
-        'UPDATE_TOTALTIME'
+        'UPDATE_TOTALTIME',
+        'UPDATE_CURRENTSONGLISTINDEX'
       ]),
       goBack(){
+
         route.isBack = 2
         route.goBack()
       },
@@ -104,6 +114,11 @@
         this.UPDATE_PLAYINGSONGID(songDetail.songs[0].id)
         this.UPDATE_PLAYINGSONGIMG(songDetail.songs[0].al.picUrl)
         this.UPDATE_PLAYINGSONGNAME(songDetail.songs[0].name)
+      },
+      //下一首
+      nextSong(){
+      	let id = this.songlist[this.currentSongListIndex]
+      	console.log(id)
       },
       hideLoading(){
         this.loading = false;

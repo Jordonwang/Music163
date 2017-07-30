@@ -25,7 +25,7 @@
         <p class="header">推荐电台</p>
         <ul>
           <li v-for="(val,index) in newSong" v-if="index>5?false:true">
-            <router-link to="{path:'/playlist/detail',query:{id:val.id}}">
+            <router-link :to="{path:'/playlist/detail',query:{id:val.id,type:'dj'}}">
               <img :src="val.picUrl" :alt="val.name" >
               <p>{{val.name}}</p>
             </router-link>

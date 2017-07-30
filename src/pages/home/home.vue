@@ -7,8 +7,12 @@
       <span v-if="!searchIcon" @click="hideSearch" class="close">关闭</span>
     </div>
     <div class="searchDetail" v-if="!searchIcon">
-      <ul>
-        <li v-for="val in searchVal">{{val.name}}</li>
+      <ul v-if="searchVal.length>0">
+        <li v-for="val in searchVal">
+          <router-link :to="{path:'/playmusic',query:{id:val.id}}">
+            {{val.name}}
+          </router-link>
+        </li>
       </ul>
     </div>
     <div class="nav">
@@ -69,10 +73,16 @@
         this.searchIcon =true
       },
       async getSearchData(){
-          console.log(this.keywords)
-        let searchData = await getSearch()
-        this.searchVal = searchData.result.songs
+        console.log(this.keywords)
+        let searchData = await getSearch(this.keywords)
+        if(searchData.code == 400){
+          this.searchVal = [{name:'暂无数据'}]
+        }else{
+          this.searchVal = searchData.result.songs
          console.log(searchData)
+        }
+        
+      
       }
     }
   }
@@ -106,16 +116,23 @@
     .close{
       line-height: 100%;
       color: #ffffff;
+      padding-right: 16px;
     }
   }
   .searchDetail{
     width:100%;
     height:100%;
-    background: rgba(22,139,245,0.38);
+    background: rgba(224,225,225,1);
     position: absolute;
     top:0;
     left: 0;
     z-index: 6;
+    li{
+      padding:10px;
+      a{
+        text-decoration:none
+      }
+    }
   }
   .nav{
     background: rgba(248, 248, 250, 0.86);
@@ -141,7 +158,8 @@
           text-align: center;
         }
         .router-link-active{
-          border-bottom: 2px solid red;
+          border-bottom: 2px solid #3CAEEA;
+          color:#3CAEEA
         }
       }
     }

@@ -50,6 +50,18 @@ export const getSonglyric = (id) => fetch('/lyric',{
 * 搜索
 * */
 export const getSearch = (keywords) => fetch('/search',{
-  keywords:keywords
+  keywords:keywords,
+  limit :10
 })
-
+/*
+*获取电台详细
+**/ 
+export const getdjdetail = (id) => fetch('/dj/detail',{
+	rid:id
+})
+/*
+* 获取精品歌单
+* */
+export const getTopSongList = (limit) => fetch('/top/playlist/highquality',{
+	limit:limit || 11
+})

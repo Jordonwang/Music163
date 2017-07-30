@@ -6,7 +6,7 @@
       <span>歌单</span>
     </header>
     <div class="desc">
-      <img :src="playlist.coverImgUrl" alt="playlist.description" width="30%">
+      <img :src="playlist.coverImgUrl" :alt="playlist.description" width="30%">
       <p>{{playlist.name}}</p>
       <p>标签:<span v-for="val in playlist.tags">{{val}},</span></p>
     </div>
@@ -32,8 +32,6 @@
     </div>
     <ul class="main">
       <li>播放全部(共{{playlist.trackCount}}首)</li>
-
-
       <li v-for="(list,index) in playlist.tracks" :keys="index">
         <router-link :to="{path:'/playmusic',query:{id:list.id}}">
           <span>{{index+1}}</span>
@@ -43,15 +41,15 @@
           </div>
         </router-link>
       </li>
-
     </ul>
     <type-loading v-if="loading"></type-loading>
   </div>
 </template>
 <script>
     import route from '@/router'
-    import {getRecomdDetails} from '@/service/getData'
+    import {getRecomdDetails,getdjdetail} from '@/service/getData'
     import typeLoading from '@/components/loading'
+    import {mapMutations} from 'vuex'
 
     export default{
       data(){
@@ -65,6 +63,9 @@
       computed:{
         ids:function () {
           return this.$route.query.id
+        },
+        type:function(){
+          return this.$route.query.type
         }
       },
       created(){
@@ -74,21 +75,31 @@
         typeLoading
       },
       methods:{
+        ...mapMutations([
+          'UPDATE_SONGLIST'
+        ]),
         goBack(){
-            console.log('goBack')
           this.$router.goBack(1)
         },
         async getRecomdDetails(id){
           let recomdDetails = await getRecomdDetails(id)
           this.playlist = recomdDetails.playlist;
-          this.playlist.songID = recomdDetails.playlist.trackIds
           this.src = recomdDetails.playlist.coverImgUrl;
+          this.UPDATE_SONGLIST(recomdDetails.playlist.trackIds)
           this.loading=false
+        },
+        async getdjdetails(id){
+          let djdetails = await getdjdetail(id)  
         }
       },
       mounted(){
+        
         this.id = this.$route.query.id;
-        this.getRecomdDetails(this.ids);
+        if(this.type=='dj'){
+          this.getdjdetails(this.ids) 
+        }else{
+          this.getRecomdDetails(this.ids)
+        }
       },
       watch:{
        '$route':function (to) {
@@ -196,6 +207,7 @@
   .main>li>a>div>p{
     height:20px;
     line-height:20px;
+    overflow: hidden;
   }
   .main>li>a>div>p:last-child{
     font-size: 13px;

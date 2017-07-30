@@ -19,7 +19,9 @@ const state = {
   songImg:'',
   startTime:'00:00',
   totalTime:'00:00',
-  isPlaying:false
+  isPlaying:false,
+  songlist:[],
+  currentSongListIndex:''
 }
 
 export default new Vuex.Store({

@@ -7,7 +7,9 @@ import {
   UPDATE_PLAYINGSONGNAME,
   UPDATE_PLAYINGSONGIMG,
   UPDATE_STARTTIME,
-  UPDATE_TOTALTIME
+  UPDATE_TOTALTIME,
+  UPDATE_SONGLIST,
+  UPDATE_CURRENTSONGLISTINDEX
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -27,5 +29,11 @@ export default {
   },
   [UPDATE_TOTALTIME](state,time){
     return state.totalTime = time
+  },
+  [UPDATE_SONGLIST](state,list){
+    return state.songlist = list
+  },
+  [UPDATE_CURRENTSONGLISTINDEX](state,index){
+    return state.currentSongListIndex = index
   }
 }
