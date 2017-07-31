@@ -9,7 +9,8 @@ import {
   UPDATE_STARTTIME,
   UPDATE_TOTALTIME,
   UPDATE_SONGLIST,
-  UPDATE_CURRENTSONGLISTINDEX
+  UPDATE_CURRENTSONGLISTINDEX,
+  UPDATE_HOMEINIT
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -35,5 +36,8 @@ export default {
   },
   [UPDATE_CURRENTSONGLISTINDEX](state,index){
     return state.currentSongListIndex = index
+  },
+  [UPDATE_HOMEINIT](state,isTure){
+    return state.homeInit = isTure
   }
 }

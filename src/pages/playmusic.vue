@@ -1,6 +1,8 @@
 <template>
 	<div>
+
     <img id="bg" :src="songImg" alt="">
+    <!--<div id="bg" :style="{background:playingSrc}"></div>-->
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>{{songName}}</span>
@@ -10,7 +12,7 @@
         <div class="outpic">
           <div class="innerpic">
               <img @click="isplay" :src="songImg" alt="">
-              <div></div>
+              <div @click="isplay"></div>
           </div>
         </div>
       </div>
@@ -23,7 +25,7 @@
         </ul>
       </div>
       <div class="process">
-      	<span v-text="startT">00:00</span>
+      	<span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
       	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
       	<span v-text="totalT">00:00</span>
       </div>
@@ -39,15 +41,14 @@
       <img src="/static/cyc.png" alt="">
       <span></span>
     </div>
-
-	<type-loading v-if="loading"></type-loading>
+	  <type-loading v-if="loading"></type-loading>
 	</div>
 </template>
 <script>
   import route from '@/router'
   import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
   import typeLoading from '@/components/loading'
-  import {mapState,mapMutations} from 'vuex'
+  import {mapState,mapMutations,mapActions} from 'vuex'
   export default{
     data(){
       return {
@@ -56,6 +57,7 @@
         src:'',
         audio:false,
         isPlaying:true,
+        playingSrc:''
       }
     },
     computed:{
@@ -71,7 +73,10 @@
       },
       totalT () {
         return this.changeTime(this.totalTime)
-      }
+      },
+//      playingSrc(){
+//          return this.songImg
+//      }
     },
     components:{
       typeLoading
@@ -80,15 +85,25 @@
       this.initData(this.id);
       var outpicWidth = document.querySelector('.outpic').clientWidth
       document.querySelector('.outpic').style.height = outpicWidth + 'px'
-      this.hideLoading();
+
       for (var i = 0;i<this.songlist.length;i++) {
-      	console.log(this.songlist[i].id)
       	if(this.id == this.songlist[i].id){
-      		console.log(i)
       		this.UPDATE_CURRENTSONGLISTINDEX(i)
-      		console.log(this.songlist.indexof(this.songlist[i].id))
       	}
       }
+      this.playingSrc = 'url('+this.songImg+')'
+      var rgb = document.querySelector('#bg')
+      console.log(rgb)
+      RGBaster.colors(rgb,{
+        success: function(payload) {
+          // payload.dominant是主色，RGB形式表示
+          // payload.secondary是次色，RGB形式表示
+          // payload.palette是调色板，含多个主要颜色，数组
+          console.log(payload.dominant);
+          console.log(payload.secondary);
+          console.log(payload.palette);
+        }
+      })
     },
     methods:{
       ...mapMutations([
@@ -100,20 +115,19 @@
         'UPDATE_TOTALTIME',
         'UPDATE_CURRENTSONGLISTINDEX'
       ]),
+      ...mapActions([
+        'GetSongUrl',
+        'GetSongDetail'
+      ]),
       goBack(){
-
         route.isBack = 2
         route.goBack()
       },
-      async initData(id){
-        let songUrl = await getSongUrl(id)
-        let songDetail = await getSongDetails(id)
-        let songlyric = await getSonglyric(id)
-
-        this.UPDATE_SONGSRC(songUrl.data[0].url)
-        this.UPDATE_PLAYINGSONGID(songDetail.songs[0].id)
-        this.UPDATE_PLAYINGSONGIMG(songDetail.songs[0].al.picUrl)
-        this.UPDATE_PLAYINGSONGNAME(songDetail.songs[0].name)
+      initData(id){
+        this.GetSongUrl(id)
+        this.GetSongDetail(id)
+        let songlyric = getSonglyric(id)
+        this.hideLoading();
       },
       //下一首
       nextSong(){
@@ -236,7 +250,7 @@
   }
   .main>.songPic>.outpic>.innerpic img{
     width:100%;
-    animation: play 8s infinite linear
+    animation: play 18s infinite linear
   }
   .main>.songPic>.outpic>.innerpic img.stop{
   	animation-play-state: paused;
@@ -257,6 +271,7 @@
     height: 60%;
     margin: 0 auto;
     position: relative;
+    z-index:2;
   }
   .main>.songPic>.outpic>.innerpic>.pused{
     background: url(/static/download.png) no-repeat;
@@ -348,6 +363,7 @@
     width: 100%;
     bottom: 15px;
     align-items: center;
+    z-index: 2;
   }
   .setting>ul>li{
     text-align: center;

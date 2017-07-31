@@ -1,11 +1,14 @@
 <template>
   <div id="app">
     <audio id="audio" autoplay :src="songSrc" @timeupdate="initProcess"></audio>
-      <transition name="router-fade" mode="out-in">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </transition>
+    <div class="welcome animated fadeOut" v-if="!homeInit">
+      <img src="/static/welcome.png" alt="">
+    </div>
+    <transition name="router-fade" mode="out-in">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -21,7 +24,7 @@ export default {
       }
   },
   computed:{
-      ...mapState(['songSrc','startTime','totalTime'])
+      ...mapState(['songSrc','startTime','totalTime','homeInit'])
   },
   methods:{
     ...mapMutations([
@@ -41,8 +44,8 @@ export default {
     '$route' (to, from) {
       const toDepth = to.path.split('/').length
       const fromDepth = from.path.split('/').length
-      console.log(toDepth)
-      console.log(fromDepth)
+//      console.log(toDepth)
+//      console.log(fromDepth)
 //      this.transitionName = toDepth < fromDepth ? 'fadeInLeft' : 'fade'
 //      if(to.path == "/myCount"){
 //        console.log(1)
@@ -117,4 +120,19 @@ export default {
 .commend{
    margin-top: 76px;
  }
+.welcome{
+  width:100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
+  z-index:-1;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  background: linear-gradient(225deg,rgb(243, 199, 164),rgb(226, 92, 89));
+}
+.welcome>img{
+  width:30%;
+}
 </style>

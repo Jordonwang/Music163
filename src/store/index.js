@@ -7,12 +7,9 @@ import mutations from './mutations'
 import getters from './getters'
 import actions from './actions'
 
-
-
 Vue.use(Vuex)
 
 const state = {
-  data:0,
   songSrc:'',
   playingSongId:'',
   songName:'',
@@ -20,6 +17,7 @@ const state = {
   startTime:'00:00',
   totalTime:'00:00',
   isPlaying:false,
+  homeInit:false,
   songlist:[],
   currentSongListIndex:''
 }

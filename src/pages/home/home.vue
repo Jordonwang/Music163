@@ -81,8 +81,8 @@
           this.searchVal = searchData.result.songs
          console.log(searchData)
         }
-        
-      
+
+
       }
     }
   }
@@ -144,9 +144,10 @@
     ul{
       list-style: none;
       padding-top: 10px;
+      text-align:center;
   li{
         adding-bottom: 8px;
-        width:24%;
+        width:23.5%;
         display:inline-block;
         a{
           text-decoration: none;

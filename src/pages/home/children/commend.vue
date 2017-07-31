@@ -35,12 +35,14 @@
     </div>
     <div class="paddingbtm"></div>
     <type-loading v-if="loading"></type-loading>
+
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import {getBannerImg,getRecmdList,getNewSong} from '@/service/getData'
   import typeLoading from '@/components/loading'
+  import {mapState,mapMutations} from 'vuex'
 
   export default{
     data(){
@@ -71,15 +73,9 @@
         observeParents:true,
         autoplayDisableOnInteraction : false,
       })
-      var cookie = document.cookie;
-      console.log(cookie)
-      if(cookie == -1){
-        console.log('未登录')
-      }else{
-        console.log('已登录')
-      }
     },
     methods:{
+      ...mapMutations(['UPDATE_HOMEINIT']),
       async initData(){
         let baners = await getBannerImg()
         this.imgSrc = baners.banners
@@ -90,6 +86,7 @@
         let newSong = await getNewSong();
         this.newSong = newSong.result
         this.hideLoading();
+        this.UPDATE_HOMEINIT(true)
       },
       hideLoading(){
         this.loading = false;
@@ -133,4 +130,5 @@
       }
     }
   }
+
 </style>

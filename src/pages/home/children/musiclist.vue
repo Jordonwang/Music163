@@ -36,7 +36,7 @@
   		mounted(){
 			let songData = this.getTopSongListPage()
   			console.log(songData)
-  			
+
   		},
   		created(){
 
@@ -66,15 +66,16 @@
 				}
 				p{
 				  text-overflow: ellipsis;
-		          overflow: hidden;
-		          display: -webkit-box;
-		          -webkit-line-clamp: 2;
-		          -webkit-box-orient: vertical;
-		          position: relative;
-		          height:2.8em;
-		          line-height: 1.4em;
-		          overflow: hidden;
-		          text-align:left;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          position: relative;
+          height:2.8em;
+          line-height: 1.4em;
+          overflow: hidden;
+          text-align:left;
+          font-size: 13px;
 				}
 			}
 		}
