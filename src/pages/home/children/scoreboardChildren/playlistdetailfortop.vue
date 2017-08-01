@@ -1,29 +1,29 @@
 <template>
   <div class="rating_page">
-    <!--<img id="bg" :src="src" alt="">-->
-    <div id="bg" :style="{background:src}"></div>
+    <img id="bg" :src="src" alt="">
+    <!--<div id="bg" :style="{background:src}"></div>-->
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>{{type}}</span>
     </header>
     <div class="desc">
-      <img :src="playlist.coverImgUrl" :alt="playlist.description" width="30%">
-      <p>{{playlist.name}}</p>
-      <p>标签:<span v-for="val in playlist.tags">{{val}},</span></p>
+      <img :src="desc.coverImgUrl" :alt="desc.description" width="30%">
+      <p>{{desc.description}}</p>
+      <p>标签:<span v-for="v in desc.tags">{{v}},</span></p>
     </div>
     <div class="count">
       <ul>
         <li>
           <img src="/static/music.png" alt="添加收藏">
-          <span>{{playlist.subscribedCount}}</span>
+          <span v-text="million(desc.subscribedCount)"></span>
         </li>
         <li>
           <img src="/static/music.png" alt="评论">
-          <span>{{playlist.commentCount}}</span>
+          <span v-text="million(desc.commentCount)"></span>
         </li>
         <li>
           <img src="/static/music.png" alt="转发">
-          <span>{{playlist.shareCount}}</span>
+          <span v-text="million(desc.shareCount)"></span>
         </li>
         <li>
           <img src="/static/music.png" alt="下载">
@@ -32,23 +32,24 @@
       </ul>
     </div>
     <ul class="main">
-      <li>播放全部(共{{playlist.trackCount}}首)</li>
-      <li v-for="(list,index) in playlist.tracks" :keys="index">
+      <li>播放全部(共{{desc.trackCount}}首)</li>
+      <li v-for="(list,index) in desc.tracks" :keys="index">
         <router-link :to="{path:'/playmusic',query:{id:list.id}}">
           <span>{{index+1}}</span>
           <div>
             <p>{{list.name}}</p>
-            <p>{{list.ar[0].name}}</p>
+            <p>{{list.artists[0].name}}</p>
           </div>
         </router-link>
       </li>
     </ul>
-    <!--<type-loading v-if="loading"></type-loading>-->
+    <type-loading v-if="loading"></type-loading>
   </div>
 </template>
 <script>
   import route from '@/router'
-  import {getRecomdDetails,getdjdetail} from '@/service/getData'
+  import Vue from 'vue'
+  import {getTopList} from '@/service/getData'
   import typeLoading from '@/components/loading'
   import {mapMutations} from 'vuex'
 
@@ -56,9 +57,9 @@
     data(){
       return{
         id:'',
-        playlist:{},
         loading:true,
-        src:''
+        src:'',
+        desc:''
       }
     },
     computed:{
@@ -88,33 +89,31 @@
       goBack(){
         this.$router.goBack(1)
       },
-      async getRecomdDetails(id){
-        let recomdDetails = await getRecomdDetails(id)
-        this.playlist = recomdDetails.playlist;
-        this.src = recomdDetails.playlist.coverImgUrl;
-        console.log(recomdDetails.playlist.trackIds)
-        this.UPDATE_SONGLIST(recomdDetails.playlist.trackIds)
-        this.loading=false
+      async getList(id){
+        let res = await getTopList(id)
+        this.desc = res.result
+        this.src = res.result.coverImgUrl
+        this.loading = false
       },
-      async getdjdetails(id){
-        let djdetails = await getdjdetail(id)
-      },
-      getBgColor(type){
-        switch (type){
-          case '0':
-            return "linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);"
-          case '1':
-            return "热歌榜"
-          case '2':
-            return "原创歌曲榜"
-          default:
-            return "电音榜"
+      million(value){
+        function replaceStr(oldStr, childStr){
+          oldStr = oldStr.replace(eval('/'+ childStr +'/g'),'万')
+          return oldStr
+        }
+        value = value +''
+        if(value>9999){
+          var val = value.substr(-4,4)
+          return  replaceStr(value,val)
+        }else if(value=='' || value == "undefined" || value ==null){
+          return 0
+        }else{
+          return value
         }
       }
     },
     mounted(){
       this.id = this.$route.query.id;
-      this.src = this.getBgColor(this.type)
+      this.getList(this.$route.query.type)
     },
     watch:{
       '$route':function (to) {
@@ -168,7 +167,7 @@
   #bg{
     position: fixed;
     z-index:-1;
-    filter: blur(50px);
+    filter: blur(200px);
     width: 100%
   }
   .desc{
@@ -206,7 +205,8 @@
   .main{
     background:#ffffff;
     padding:10px;
-    overflow: auto
+    overflow: scroll;
+    height: 65%;
   }
   .main>li{
     height: 40px;

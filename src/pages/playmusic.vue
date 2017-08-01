@@ -26,12 +26,12 @@
       <div class="process">
       	<span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
       	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
-      	<span v-text="totalT">00:00</span>
+      	<span v-text="totalT" v-if="totalT=='NaN:NaN'?totalT='00:00':totalT">00:00</span>
       </div>
       <div class="setting">
       	<ul>
       		<li><img src="/static/orderloop.png" alt=""></li>
-      		<li><img src="/static/left-arrow.png" alt=""></li>
+      		<li @click="prevSong"><img src="/static/left-arrow.png" alt=""></li>
       		<li @click="isplay"><img id="pused" src="/static/pused.png" alt=""></li>
       		<li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
       		<li><img src="/static/menu.png" alt=""></li>
@@ -68,10 +68,18 @@
         return (this.startTime/this.totalTime)*100
       },
       startT () {
-        return this.changeTime(this.startTime)
+        if(this.changeTime(this.startTime)=='NaN:NaN'){
+          return '00:00'
+        }else{
+          return this.changeTime(this.startTime)
+        }
       },
       totalT () {
-        return this.changeTime(this.totalTime)
+        if(this.changeTime(this.totalTime)=='NaN:NaN'){
+            return '00:00'
+        }else{
+          return this.changeTime(this.totalTime)
+        }
       }
     },
     components:{
@@ -117,8 +125,25 @@
       },
       //下一首
       nextSong(){
-      	let id = this.songlist[this.currentSongListIndex]
-      	console.log(id)
+        let index = this.currentSongListIndex
+        if(index == this.songlist.length-1){
+            index = 0
+        }
+        index ++
+        this.UPDATE_CURRENTSONGLISTINDEX(index)
+      	let id = this.songlist[index].id
+        this.initData(id)
+      },
+      //上一首
+      prevSong(){
+        let index = this.currentSongListIndex
+        if(index==0){
+          index = this.songlist.length
+        }
+        index --
+        this.UPDATE_CURRENTSONGLISTINDEX(index)
+        let id = this.songlist[index].id
+        this.initData(id)
       },
       hideLoading(){
         this.loading = false;

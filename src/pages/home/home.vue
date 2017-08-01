@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head">
-      <i v-if="searchIcon" class="el-icon-setting"></i>
+      <i @click="dialogTest" v-if="searchIcon" class="el-icon-setting"></i>
       <input v-model="keywords" @click="searchSong" @input="getSearchData" :style="'width:'+searchwidth+'%'" class="search" type="text" placeholder="搜索音乐 歌词 电台">
       <i v-if="searchIcon" class="el-icon-more"></i>
       <span v-if="!searchIcon" @click="hideSearch" class="close">关闭</span>
@@ -32,6 +32,7 @@
       </ul>
     </div>
     <page-trans></page-trans>
+    <dialog-info v-if="dialog"></dialog-info>
     <!--<transition name="router-fade" mode="out-in">-->
       <!--<keep-alive>-->
         <!--<router-view></router-view>-->
@@ -45,6 +46,7 @@
   import footerView from '@/components/footer'
   import pageTrans from '@/components/pagetransition'
   import { getSearch } from '@/service/getData'
+  import dialogInfo from '@/components/dialog'
 
   export default{
     data(){
@@ -52,11 +54,12 @@
         searchIcon:true,
         searchwidth:70,
         keywords:'',
-        searchVal:[]
+        searchVal:[],
+        dialog:false
       }
     },
     components:{
-        footerView,pageTrans
+        footerView,pageTrans,dialogInfo
     },
     computed:{
     },
@@ -81,8 +84,9 @@
           this.searchVal = searchData.result.songs
          console.log(searchData)
         }
-
-
+      },
+      dialogTest(){
+        this.dialog = true
       }
     }
   }

@@ -36,7 +36,7 @@ export default {
       var audio = document.querySelector('#audio');
       var time = parseInt(audio.currentTime);
       var timeLength = parseInt(audio.duration);
-      console.log('time'+time+'---timeLength'+timeLength)
+//      console.log('time'+time+'---timeLength'+timeLength)
       if(time==timeLength){
 
       }
