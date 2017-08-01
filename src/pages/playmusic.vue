@@ -1,81 +1,138 @@
 <template>
 	<div>
-    <img id="bg" :src="songDetail.songs[0].al.picUrl" alt="">
+
+    <img id="bg" :src="songImg" alt="">
+    <!--<div id="bg" :style="{background:playingSrc}"></div>-->
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
-      <span>{{songDetail.songs[0].name}}</span>
+      <span>{{songName}}</span>
     </header>
     <div class="main">
       <div class="songPic">
         <div class="outpic">
           <div class="innerpic">
-              <img @click="isplay" :src="songDetail.songs[0].al.picUrl" alt="">
+              <img @click="isplay" :src="songImg" alt="">
+              <div @click="isplay"></div>
           </div>
         </div>
       </div>
-      <div class="more"></div>
-      <div class="process">
-      	<span>{{time.start}}</span>
-      	<div><span id="process"></span></div>
-      	<span>{{time.end}}</span>
+      <div class="more">
+        <ul>
+          <li><img src="/static/heart.png" alt=""></li>
+          <li><img src="/static/dwn.png" alt=""></li>
+          <li><img src="/static/comment.png" alt=""></li>
+          <li><img src="/static/more.png" alt=""></li>
+        </ul>
       </div>
-      <div class="setting"></div>
+      <div class="process">
+      	<span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
+      	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
+      	<span v-text="totalT">00:00</span>
+      </div>
+      <div class="setting">
+      	<ul>
+      		<li><img src="/static/orderloop.png" alt=""></li>
+      		<li><img src="/static/left-arrow.png" alt=""></li>
+      		<li><img src="/static/pused.png" alt=""></li>
+      		<li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
+      		<li><img src="/static/menu.png" alt=""></li>
+      	</ul>
+      </div>
+      <img src="/static/cyc.png" alt="">
       <span></span>
     </div>
-    <audio id="audio" autoplay :src="src" @timeupdate="initProcess"></audio>
-	<type-loading v-if="loading"></type-loading>
+	  <type-loading v-if="loading"></type-loading>
 	</div>
 </template>
 <script>
-  	import route from '@/router'
-	import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
-  	import typeLoading from '@/components/loading'
-
-export default{
-	data(){
-		return {
-			loading:true,
-			songID:'',
-	        src:'',
-	        audio:false,
-	        isPlaying:true,
-	        songDetail:{
-	          songs:[{'al':{'picUrl':''}}]
-	        },
-	        time:{
-	        	start:'00:00',
-	        	end:'00:00'
-	        }
-		}
-	},
-	computed:{
-	  id:function () {
-	    return this.$route.query.id
-	  }
+  import route from '@/router'
+  import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
+  import typeLoading from '@/components/loading'
+  import {mapState,mapMutations,mapActions} from 'vuex'
+  export default{
+    data(){
+      return {
+        loading:true,
+        songID:'',
+        src:'',
+        audio:false,
+        isPlaying:true,
+        playingSrc:''
+      }
+    },
+    computed:{
+      ...mapState(['playingSongId','songSrc','songName','songImg','startTime','totalTime','playingSongId','songlist','currentSongListIndex']),
+      id () {
+        return this.$route.query.id
+      },
+      processWidth () {
+        return (this.startTime/this.totalTime)*100
+      },
+      startT () {
+        return this.changeTime(this.startTime)
+      },
+      totalT () {
+        return this.changeTime(this.totalTime)
+      },
+//      playingSrc(){
+//          return this.songImg
+//      }
     },
     components:{
       typeLoading
     },
     mounted(){
       this.initData(this.id);
-      var _this = this;
       var outpicWidth = document.querySelector('.outpic').clientWidth
       document.querySelector('.outpic').style.height = outpicWidth + 'px'
-      // setInterval(function () {
-      // 	_this.initProcess()
-      // },1000)
+
+      for (var i = 0;i<this.songlist.length;i++) {
+      	if(this.id == this.songlist[i].id){
+      		this.UPDATE_CURRENTSONGLISTINDEX(i)
+      	}
+      }
+      this.playingSrc = 'url('+this.songImg+')'
+      var rgb = document.querySelector('#bg')
+      console.log(rgb)
+      RGBaster.colors(rgb,{
+        success: function(payload) {
+          // payload.dominant是主色，RGB形式表示
+          // payload.secondary是次色，RGB形式表示
+          // payload.palette是调色板，含多个主要颜色，数组
+          console.log(payload.dominant);
+          console.log(payload.secondary);
+          console.log(payload.palette);
+        }
+      })
     },
     methods:{
+      ...mapMutations([
+        'UPDATE_SONGSRC',
+        'UPDATE_PLAYINGSONGID',
+        'UPDATE_PLAYINGSONGIMG',
+        'UPDATE_PLAYINGSONGNAME',
+        'UPDATE_STARTTIME',
+        'UPDATE_TOTALTIME',
+        'UPDATE_CURRENTSONGLISTINDEX'
+      ]),
+      ...mapActions([
+        'GetSongUrl',
+        'GetSongDetail'
+      ]),
       goBack(){
+        route.isBack = 2
         route.goBack()
       },
-      async initData(id){
-        let songUrl = await getSongUrl(id)
-        let songDetail = await getSongDetails(id)
-        let songlyric = await getSonglyric(id)
-        this.src = songUrl.data[0].url
-        this.songDetail = songDetail
+      initData(id){
+        this.GetSongUrl(id)
+        this.GetSongDetail(id)
+        let songlyric = getSonglyric(id)
         this.hideLoading();
+      },
+      //下一首
+      nextSong(){
+      	let id = this.songlist[this.currentSongListIndex]
+      	console.log(id)
       },
       hideLoading(){
         this.loading = false;
@@ -83,55 +140,46 @@ export default{
       isplay(){
       	var audio = document.querySelector('#audio');
       	var play = document.querySelector('.main').lastChild;
-      	var img = document.querySelector('.innerpic').lastChild
+      	var img = document.querySelector('.innerpic').firstChild;
+      	var pused = document.querySelector('.innerpic').lastChild;
       	if (this.isPlaying) {
       		this.isPlaying = !this.isPlaying
       		play.setAttribute('class','play')
       		img.setAttribute('class','stop')
+          pused.setAttribute('class','pused')
       		audio.pause()
       	}else{
       		this.isPlaying = !this.isPlaying
       		play.removeAttribute('class')
+          pused.removeAttribute('class')
       		img.setAttribute('class','start')
       		audio.play()
       	}
       },
-      initProcess(){
-      	var audio = document.querySelector('#audio');
-      	var proces = document.querySelector('#process');
-      	var time = parseInt(audio.currentTime);
-      	var timeLength = audio.duration;
-      	if(time == timeLength){
-      		isplay()
-      	}
-		proces.style.width = (time/timeLength) * 100 +'%' 
-      	this.time.start = this.changeTime(time);
-        this.time.end = this.changeTime(timeLength);
-      },
       changeTime(time){
-      	  var minute = parseInt(time / 60);
-		  if (minute < 10) {
-		    minute = '0' + minute;
-		  }
-		  var secound = parseInt(time % 60);
-		  if (secound < 10) {
-		    secound = '0' + secound;
-		  }
-		  return minute + ':' + secound;
+        var minute = parseInt(time / 60);
+        if (minute < 10) {
+          minute = '0' + minute;
+        }
+        var secound = parseInt(time % 60);
+        if (secound < 10) {
+          secound = '0' + secound;
+        }
+        return minute + ':' + secound;
       }
     },
     watch:{
      '$route':function (to) {
-         console.log(to)
-         if(to.path=='/playmusic'){
-           this.songID='';
-           this.id='';
-           this.initData(this.id);
-           this.loading=true;
+       if(to.path=='/playmusic'){
+           console.log('this.playingSongId++++'+this.playingSongId)
+           console.log('this.id++++'+this.id)
+         if(!(this.playingSongId === this.id)){
+           window.location.reload()
          }
        }
+     }
     }
-}
+  }
 </script>
 <style scoped>
   header{
@@ -145,7 +193,6 @@ export default{
     top: 0;
     right: 0;
     z-index: 1;
-    background: rgb(187, 187, 187);
   }
   header>a{
     position: absolute;
@@ -176,7 +223,7 @@ export default{
   }
   .main{
     position: relative;
-    margin-top: 100px;
+    padding-top: 85px;
   }
   .main>span{
     display: block;
@@ -185,17 +232,25 @@ export default{
     width:96px;
     height: 137px;
     position: absolute;
-    top:-68px;
+    top:44px;
+    left: 46%;
+    transition:all .3s;
+    transform-origin:0px 18px;
+  }
+  .main>img{
+    position: absolute;
+    top: 41px;
     left: 45%;
-    transition:all .3s
+    width: 9%;
+    z-index: 1;
   }
   .main>.play{
   	transform: rotate(-45deg);
-    transform-origin:left 18px;
+
   }
   .main>.songPic>.outpic>.innerpic img{
     width:100%;
-    animation: play 8s infinite linear
+    animation: play 18s infinite linear
   }
   .main>.songPic>.outpic>.innerpic img.stop{
   	animation-play-state: paused;
@@ -215,6 +270,17 @@ export default{
     width: 60%;
     height: 60%;
     margin: 0 auto;
+    position: relative;
+    z-index:2;
+  }
+  .main>.songPic>.outpic>.innerpic>.pused{
+    background: url(/static/download.png) no-repeat;
+    width: 30%;
+    height: 30%;
+    position: absolute;
+    top: 35%;
+    background-size: contain;
+    left: 35%;
   }
   .main>.songPic>.outpic{
     margin: 30px;
@@ -233,17 +299,76 @@ export default{
   	line-height: 10px;
   	justify-content: center;
   	align-items: center;
+    padding: 0 16px;
+    margin: 4% 0;
+  }
+  .process>span{
+    font-size:12px;
+    color: #fff;
   }
   .process>div{
   	width: 70%;
   	height: 2px;
   	background:#ccc ;
-  	margin: 0 10px
+  	margin: 0 20px
   }
   .process>div>span{
   	height: 100%;
   	display: block;
   	width: 0px;
-  	background: #000
+  	background: #168bf5;
+    position: relative;
+  }
+  .process>div>span>i{
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: -6px;
+    border-radius: 50%;
+  }
+  .process>div>span>i:after{
+    content: '';
+    display: block;
+    width: 4px;
+    height:4px;
+    border-radius: 50%;
+    background: #168bf5;
+    position: absolute;
+    top:5px;
+    left:5px;
+  }
+  .more{
+  	margin-top: 13%
+  }
+  .more>ul{
+  	display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 20px 50px;
+  }
+  .more>ul>li{
+    text-align: center;
+  }
+  .more>ul>li>img{
+  	width: 45%
+  }
+  .setting>ul{
+  	display: flex;
+    justify-content: space-around;
+    list-style: none;
+    position: fixed;
+    width: 100%;
+    bottom: 15px;
+    align-items: center;
+    z-index: 2;
+  }
+  .setting>ul>li{
+    text-align: center;
+  }
+  .setting>ul>li>img{
+	  width: 45%
   }
 </style>

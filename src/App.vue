@@ -1,52 +1,59 @@
 <template>
   <div id="app">
-      <transition name="router-fade" mode="out-in">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </transition>
+    <audio id="audio" autoplay :src="songSrc" @timeupdate="initProcess"></audio>
+    <div class="welcome animated fadeOut" v-if="!homeInit">
+      <img src="/static/welcome.png" alt="">
+    </div>
+    <transition name="router-fade" mode="out-in">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import store from './store'
-//  import {mapState, mapMutations} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
+
 export default {
   name: 'app',
   data(){
       return {
-          msgOne:'msg',
-          menus: [
-            {id: 1, path: '/home', name: 'home', title: '首页'},
-            {id: 2, path: '/about', name: 'about', title: '关于'},
-            {id: 3, path: '/service', name: 'service', title: '服务'},
-            {id: 4, path: '/hello', name: 'hello', title: '测试'}
-          ],
-        transitionName:""
       }
   },
   computed:{
-      add(){
-          return store.state.data
-      }
+      ...mapState(['songSrc','startTime','totalTime','homeInit'])
   },
   methods:{
-      addnum(){
-        store.commit('ADD_NUM')
-      },
-      reducenum(){
-          store.commit('REDUCE_NUM',100)
-      }
+    ...mapMutations([
+      'UPDATE_STARTTIME',
+      'UPDATE_TOTALTIME'
+    ]),
+    initProcess(){
+      var audio = document.querySelector('#audio');
+      var time = parseInt(audio.currentTime);
+      var timeLength = parseInt(audio.duration);
+      this.UPDATE_STARTTIME(time)
+      this.UPDATE_TOTALTIME(timeLength)
+    }
   },
   //监听路由的路径，可以通过不同的路径去选择不同的切换效果
   watch: {
     '$route' (to, from) {
-      if(to.path == '/about'){
-          console.log(1)
-        this.transitionName = 'slide-right';
-      }else{
-        this.transitionName = 'slide-left';
-      }
+      const toDepth = to.path.split('/').length
+      const fromDepth = from.path.split('/').length
+//      console.log(toDepth)
+//      console.log(fromDepth)
+//      this.transitionName = toDepth < fromDepth ? 'fadeInLeft' : 'fade'
+//      if(to.path == "/myCount"){
+//        console.log(1)
+//
+//        this.transitionName = 'fades';
+//      }else{
+//        this.transitionName = 'fade';
+//      }
     }
   }
 }
@@ -61,7 +68,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
   color: #2c3e50;
   max-width: 480px;
   margin:0 auto;
@@ -83,16 +89,13 @@ export default {
   height: 100%;
   transition: all .5s cubic-bezier(.55,0,.1,1);
 }
-.slide-left-enter, .slide-right-leave-active {
-  opacity: 0;
-  -webkit-transform: translate(30px, 0);
-  transform: translate(30px, 0);
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0s
 }
-.slide-left-leave-active, .slide-right-enter {
-  opacity: 0;
-  -webkit-transform: translate(-30px, 0);
-  transform: translate(-30px, 0);
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
+
 .flexRowBetween{
   position: fixed;
   bottom:0;
@@ -117,4 +120,19 @@ export default {
 .commend{
    margin-top: 76px;
  }
+.welcome{
+  width:100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
+  z-index:-1;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  background: linear-gradient(225deg,rgb(243, 199, 164),rgb(226, 92, 89));
+}
+.welcome>img{
+  width:30%;
+}
 </style>

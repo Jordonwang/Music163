@@ -2,7 +2,7 @@
   <ul>
     <li v-for="val in footerList">
       <router-link :to="val.to">
-        <img :src="val.imgSrc" alt="">
+        <img :src="val.imgSrc" :alt="val.title">
         <span>{{val.title}}</span>
       </router-link>
     </li>
@@ -42,7 +42,7 @@
     display: flex;
     padding-left:0;
     width:100%;
-    background:rgba(16, 14, 14, 0.9);
+    background:rgba(16, 14, 14, 0.8);
     margin: 0px;
     max-width: 480px;
     margin: 0 auto;
@@ -60,7 +60,7 @@
         font-size: 12px;
         text-align: center;
         img{
-          width:30%
+          width:20%
         }
         span{
           display:block

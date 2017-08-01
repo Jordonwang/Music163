@@ -5,8 +5,9 @@ import {routerMode} from '../config/env'
 
 Vue.use(Router)
 
-Router.prototype.goBack = function () {
-  this.isBack = true
+Router.prototype.goBack = function (num) {
+  this.isBack = num
+  console.log('Router.prototype.goBack'+num)
   window.history.go(-1)
 }
 
@@ -19,34 +20,39 @@ const Commend = r => require.ensure([], () => r(require('@/pages/home/children/c
 const MusicList = r => require.ensure([], () => r(require('@/pages/home/children/musiclist')), 'musiclist')
 const RadioStation = r => require.ensure([], () => r(require('@/pages/home/children/radiostation')), 'radiostation')
 const Scoreboard = r => require.ensure([], () => r(require('@/pages/home/children/Scoreboard')), 'Scoreboard')
-const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/children/playlistdetail')), 'playlistdetail')
+const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/commendChildren/playlistdetail')), 'playlistdetail')
+const playListDetailforTop = r => require.ensure([], () => r(require('@/pages/home/children/scoreboardChildren/playlistdetailfortop')), 'playListDetailforTop')
+
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
-
-
+const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
 
 var router =  new Router({
   mode:routerMode,
   routes: [
     {
       path: '/',
-      redirect:'/home/commend'
-
+      redirect:'/home/commend',
+      component:pageTransition
     },
     {
       path: '/home',
       component: Home,
       children:[{
-        path:'/home/commend',
+        path:'commend',
         component:Commend
       },{
-        path:'/home/musiclist',
+        path:'musiclist',
         component:MusicList
       },{
-        path:'/home/radiostation',
+        path:'radiostation',
         component:RadioStation
       },{
-        path:'/home/Scoreboard',
-        component:Scoreboard
+        path:'Scoreboard',
+        component:Scoreboard,
+        children:[{
+          path:'detail',
+          component:playListDetailforTop
+        }]
       }]
     },
     {

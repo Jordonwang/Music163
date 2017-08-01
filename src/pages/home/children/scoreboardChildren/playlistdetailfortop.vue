@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <img id="bg" src="" alt="">
+  <div class="rating_page">
+    <!--<img id="bg" :src="src" alt="">-->
+    <!--<div id="bg" :style="{background-image:src}"></div>-->
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
-      <span>歌单</span>
+      <span>{{type}}</span>
     </header>
     <div class="desc">
-      <img :src="playlist.coverImgUrl" alt="playlist.description" width="30%">
+      <img :src="playlist.coverImgUrl" :alt="playlist.description" width="30%">
       <p>{{playlist.name}}</p>
       <p>标签:<span v-for="val in playlist.tags">{{val}},</span></p>
     </div>
@@ -32,8 +33,6 @@
     </div>
     <ul class="main">
       <li>播放全部(共{{playlist.trackCount}}首)</li>
-
-
       <li v-for="(list,index) in playlist.tracks" :keys="index">
         <router-link :to="{path:'/playmusic',query:{id:list.id}}">
           <span>{{index+1}}</span>
@@ -43,67 +42,101 @@
           </div>
         </router-link>
       </li>
-
     </ul>
-    <type-loading v-if="loading"></type-loading>
+    <!--<type-loading v-if="loading"></type-loading>-->
   </div>
 </template>
 <script>
-    import route from '@/router'
-    import {getRecomdDetails} from '@/service/getData'
-    import typeLoading from '@/components/loading'
+  import route from '@/router'
+  import {getRecomdDetails,getdjdetail} from '@/service/getData'
+  import typeLoading from '@/components/loading'
+  import {mapMutations} from 'vuex'
 
-    export default{
-      data(){
-        return{
-          id:'',
-          playlist:{
-//            coverImgUrl:''
-            songID:[]
-          },
-          loading:true,
+  export default{
+    data(){
+      return{
+        id:'',
+        playlist:{},
+        loading:true,
+        src:''
+      }
+    },
+    computed:{
+      type:function(){
+        switch (this.$route.query.type){
+          case '1':
+            return "新歌榜"
+          case '2':
+            return "热歌榜"
+          case '3':
+            return "原创歌曲榜"
+          default:
+            return "电音榜"
         }
-      },
-      computed:{
-        ids:function () {
-          return this.$route.query.id
-        }
-      },
-      created(){
+      }
+    },
+    created(){
 
+    },
+    components:{
+      typeLoading
+    },
+    methods:{
+      ...mapMutations([
+        'UPDATE_SONGLIST'
+      ]),
+      goBack(){
+        this.$router.goBack(1)
       },
-      components:{
-        typeLoading
+      async getRecomdDetails(id){
+        let recomdDetails = await getRecomdDetails(id)
+        this.playlist = recomdDetails.playlist;
+        this.src = recomdDetails.playlist.coverImgUrl;
+        console.log(recomdDetails.playlist.trackIds)
+        this.UPDATE_SONGLIST(recomdDetails.playlist.trackIds)
+        this.loading=false
       },
-      methods:{
-        goBack(){
-          route.goBack()
-        },
-        async getRecomdDetails(id){
-          let recomdDetails = await getRecomdDetails(id)
-          this.playlist = recomdDetails.playlist;
-          this.playlist.songID = recomdDetails.playlist.trackIds
-          document.getElementById('bg').src = recomdDetails.playlist.coverImgUrl;
-          this.loading=false
+      async getdjdetails(id){
+        let djdetails = await getdjdetail(id)
+      },
+      getBgColor(type){
+        switch (type){
+          case '1':
+            return "linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);"
+          case '2':
+            return "热歌榜"
+          case '3':
+            return "原创歌曲榜"
+          default:
+            return "电音榜"
         }
-      },
-      mounted(){
-        this.id = this.$route.query.id;
-        this.getRecomdDetails(this.ids);
-      },
-      watch:{
-       '$route':function (to) {
-           console.log(to)
-         if(to.path=='/playlist/detail'){
-           this.playlist=[];
-           this.loading=true;
-           this.getRecomdDetails(this.ids);
-         }
-       }
+      }
+    },
+    mounted(){
+      this.id = this.$route.query.id;
+      this.src = this.getBgColor(this.type)
+    },
+    watch:{
+      '$route':function (to) {
+        if(to.path=='/playlist/detail'){
+          this.playlist=[];
+          this.loading=true;
+          this.getRecomdDetails(this.ids);
+        }
       }
     }
+  }
 </script>
 <style scoped>
+  .rating_page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f2f2f2;
+    z-index: 202;
+  }
   header{
     text-align: center;
     height:30px;
@@ -198,6 +231,7 @@
   .main>li>a>div>p{
     height:20px;
     line-height:20px;
+    overflow: hidden;
   }
   .main>li>a>div>p:last-child{
     font-size: 13px;

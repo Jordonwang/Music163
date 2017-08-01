@@ -25,7 +25,7 @@
         <p class="header">推荐电台</p>
         <ul>
           <li v-for="(val,index) in newSong" v-if="index>5?false:true">
-            <router-link to="{path:'/playlist/detail',query:{id:val.id}}">
+            <router-link :to="{path:'/playlist/detail',query:{id:val.id,type:'dj'}}">
               <img :src="val.picUrl" :alt="val.name" >
               <p>{{val.name}}</p>
             </router-link>
@@ -33,13 +33,16 @@
         </ul>
       </header>
     </div>
+    <div class="paddingbtm"></div>
     <type-loading v-if="loading"></type-loading>
+
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import {getBannerImg,getRecmdList,getNewSong} from '@/service/getData'
   import typeLoading from '@/components/loading'
+  import {mapState,mapMutations} from 'vuex'
 
   export default{
     data(){
@@ -56,9 +59,10 @@
     computed:{
     },
     created(){
-
+      console.log('created')
     },
     mounted() {
+      console.log('mounted')
       this.initData();
       var mySwiper = new Swiper('.swiper-container', {
         autoplay: 3000,//可选选项，自动滑动
@@ -69,15 +73,9 @@
         observeParents:true,
         autoplayDisableOnInteraction : false,
       })
-      var cookie = document.cookie;
-      console.log(cookie)
-      if(cookie == -1){
-        console.log('未登录')
-      }else{
-        console.log('已登录')
-      }
     },
     methods:{
+      ...mapMutations(['UPDATE_HOMEINIT']),
       async initData(){
         let baners = await getBannerImg()
         this.imgSrc = baners.banners
@@ -88,6 +86,7 @@
         let newSong = await getNewSong();
         this.newSong = newSong.result
         this.hideLoading();
+        this.UPDATE_HOMEINIT(true)
       },
       hideLoading(){
         this.loading = false;
@@ -96,8 +95,8 @@
   }
 </script>
 <style lang="scss">
-  .recmdList:nth-last-child(1){
-    padding-bottom: 65px;
+  .paddingbtm{
+    padding-bottom: 50px;
   }
   .recmdList{
     .header{
@@ -118,10 +117,18 @@
           width:100%;
         }
         p{
-          height: 45px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          position: relative;
+          height:2.8em;
+          line-height: 1.4em;
           overflow: hidden;
         }
       }
     }
   }
+
 </style>
