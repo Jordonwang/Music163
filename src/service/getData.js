@@ -68,7 +68,7 @@ export const getTopSongList = (limit) => fetch('/top/playlist/highquality',{
 /*
 * 云音乐排行榜
 * */
-export const getTopList0 = (idx) => fetch('/top/list',{
+export const getTopList = (idx) => fetch('/top/list',{
   idx:idx
 })
 
