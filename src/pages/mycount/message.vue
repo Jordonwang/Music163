@@ -1,5 +1,5 @@
 <template>
-  <div id="div">
+  <div id="div" class="rating_page">
     <div class="nav">
       <img src="static/icn_back.png">
       <p class="nav-title">我的消息</p>
@@ -29,5 +29,14 @@
   .nav-title{
     padding-top: 10px;
     color: white;
+  }
+  .rating_page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f2f2f2;
+    z-index: 202;
   }
 </style>

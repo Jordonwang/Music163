@@ -29,12 +29,17 @@ export default {
   methods:{
     ...mapMutations([
       'UPDATE_STARTTIME',
-      'UPDATE_TOTALTIME'
+      'UPDATE_TOTALTIME',
+      'UPDATE_ISPLAYING'
     ]),
     initProcess(){
       var audio = document.querySelector('#audio');
       var time = parseInt(audio.currentTime);
       var timeLength = parseInt(audio.duration);
+      console.log('time'+time+'---timeLength'+timeLength)
+      if(time==timeLength){
+
+      }
       this.UPDATE_STARTTIME(time)
       this.UPDATE_TOTALTIME(timeLength)
     }

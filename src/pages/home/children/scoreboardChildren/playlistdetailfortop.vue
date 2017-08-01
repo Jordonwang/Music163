@@ -1,7 +1,7 @@
 <template>
   <div class="rating_page">
     <!--<img id="bg" :src="src" alt="">-->
-    <!--<div id="bg" :style="{background-image:src}"></div>-->
+    <div id="bg" :style="{background:src}"></div>
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>{{type}}</span>
@@ -64,11 +64,11 @@
     computed:{
       type:function(){
         switch (this.$route.query.type){
-          case '1':
+          case '0':
             return "新歌榜"
-          case '2':
+          case '1':
             return "热歌榜"
-          case '3':
+          case '2':
             return "原创歌曲榜"
           default:
             return "电音榜"
@@ -101,11 +101,11 @@
       },
       getBgColor(type){
         switch (type){
-          case '1':
+          case '0':
             return "linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);"
-          case '2':
+          case '1':
             return "热歌榜"
-          case '3':
+          case '2':
             return "原创歌曲榜"
           default:
             return "电音榜"

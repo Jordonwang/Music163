@@ -25,6 +25,8 @@ const playListDetailforTop = r => require.ensure([], () => r(require('@/pages/ho
 
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
 const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
+const message = r => require.ensure([], () => r(require('@/pages/mycount/message')), 'message')
+
 
 var router =  new Router({
   mode:routerMode,
@@ -68,7 +70,11 @@ var router =  new Router({
     {
       path: '/mycount',
       name: 'MyCount',
-      component: MyCount
+      component: MyCount,
+      children:[{
+        path:'message',
+        component:message
+      }]
     },
     {
       path:'/playlist/detail',

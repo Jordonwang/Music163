@@ -1,8 +1,7 @@
 <template>
 	<div>
-
     <img id="bg" :src="songImg" alt="">
-    <!--<div id="bg" :style="{background:playingSrc}"></div>-->
+    <div id="bg2"></div>
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>{{songName}}</span>
@@ -33,7 +32,7 @@
       	<ul>
       		<li><img src="/static/orderloop.png" alt=""></li>
       		<li><img src="/static/left-arrow.png" alt=""></li>
-      		<li><img src="/static/pused.png" alt=""></li>
+      		<li @click="isplay"><img id="pused" src="/static/pused.png" alt=""></li>
       		<li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
       		<li><img src="/static/menu.png" alt=""></li>
       	</ul>
@@ -73,10 +72,7 @@
       },
       totalT () {
         return this.changeTime(this.totalTime)
-      },
-//      playingSrc(){
-//          return this.songImg
-//      }
+      }
     },
     components:{
       typeLoading
@@ -92,18 +88,8 @@
       	}
       }
       this.playingSrc = 'url('+this.songImg+')'
-      var rgb = document.querySelector('#bg')
-      console.log(rgb)
-      RGBaster.colors(rgb,{
-        success: function(payload) {
-          // payload.dominant是主色，RGB形式表示
-          // payload.secondary是次色，RGB形式表示
-          // payload.palette是调色板，含多个主要颜色，数组
-          console.log(payload.dominant);
-          console.log(payload.secondary);
-          console.log(payload.palette);
-        }
-      })
+    },
+    updated(){
     },
     methods:{
       ...mapMutations([
@@ -142,17 +128,20 @@
       	var play = document.querySelector('.main').lastChild;
       	var img = document.querySelector('.innerpic').firstChild;
       	var pused = document.querySelector('.innerpic').lastChild;
+      	var stop = document.querySelector('#pused');
       	if (this.isPlaying) {
       		this.isPlaying = !this.isPlaying
       		play.setAttribute('class','play')
       		img.setAttribute('class','stop')
           pused.setAttribute('class','pused')
+          stop.src = "/static/play.png"
       		audio.pause()
       	}else{
       		this.isPlaying = !this.isPlaying
       		play.removeAttribute('class')
           pused.removeAttribute('class')
       		img.setAttribute('class','start')
+          stop.src = "/static/pused.png"
       		audio.play()
       	}
       },
@@ -216,10 +205,17 @@
   }
   #bg{
     position: fixed;
-    z-index:-1;
+    z-index:-2;
     filter: blur(100px);
     width: 100%;
     height: 100%;
+  }
+  #bg2{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(68,66,68,0.37);
+    z-index: -1;
   }
   .main{
     position: relative;

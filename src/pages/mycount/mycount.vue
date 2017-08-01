@@ -58,6 +58,9 @@
       </ul>
     </div>
     <div class="footer"></div>
+    <transition name="router-slid" mode="out-in">
+      <router-view></router-view>
+    </transition>
     <footer-view></footer-view>
   </div>
 
@@ -72,14 +75,14 @@
           username:'15014093499',
           userpwd:'zxcvbnm3499',
           list1:[{
-            to:'/message',
+            to:'/mycount/message',
             title: '我的消息',
-            imgSrc:'static/icn_mail.png'
+            imgSrc:'/static/icn_mail.png'
         }],
           list2:[{
             to:'/message',
             title: '会员中心',
-            imgSrc:'static/icn_vip.png'
+            imgSrc:'/static/icn_vip.png'
           },
             {
               to:'/message',
@@ -157,6 +160,13 @@
   }
 </script>
 <style scoped>
+  .router-slid-enter-active, .router-slid-leave-active {
+    transition: all .4s;
+  }
+  .router-slid-enter, .router-slid-leave-active {
+    transform: translate3d(2rem, 0, 0);
+    opacity: 0;
+  }
   .div{
     background: #f5f5f5;
   }

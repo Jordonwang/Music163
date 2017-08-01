@@ -27,7 +27,8 @@ export default async(url = '', data = {}, type = 'GET') => {
       request = axios({
         method: type,
         url: url,
-        params: data
+        params: data,
+        // headers:{"Access-Control-Allow-Origin":"*"}
       });
     }
 
