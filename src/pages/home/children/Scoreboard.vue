@@ -3,7 +3,7 @@
     <p>云音乐官方榜</p>
     <ul>
       <li>
-        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'1'}}">
+        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'0'}}">
           <div>新歌榜</div>
           <ul>
             <li v-for="(song,index) in list0" v-if="!(index>2)">{{index+1}}.{{song.name}}</li>
@@ -11,7 +11,7 @@
         </router-link>
       </li>
       <li>
-        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'2'}}">
+        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'1'}}">
           <div>热歌榜</div>
           <ul>
             <li v-for="(song,index) in list1" v-if="!(index>2)">{{index+1}}.{{song.name}}</li>
@@ -19,7 +19,7 @@
         </router-link>
       </li>
       <li>
-        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'3'}}">
+        <router-link :to="{path:'/home/Scoreboard/detail',query:{type:'2'}}">
           <div>原创歌曲榜</div>
           <ul>
             <li v-for="(song,index) in list2" v-if="!(index>2)">{{index+1}}.{{song.name}}</li>
