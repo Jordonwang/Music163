@@ -55,7 +55,7 @@ export const getSearch = (keywords) => fetch('/search',{
 })
 /*
 *获取电台详细
-**/ 
+**/
 export const getdjdetail = (id) => fetch('/dj/detail',{
 	rid:id
 })
@@ -65,3 +65,10 @@ export const getdjdetail = (id) => fetch('/dj/detail',{
 export const getTopSongList = (limit) => fetch('/top/playlist/highquality',{
 	limit:limit || 11
 })
+/*
+* 云音乐排行榜
+* */
+export const getTopList = (idx) => fetch('/top/list',{
+  idx:idx
+})
+

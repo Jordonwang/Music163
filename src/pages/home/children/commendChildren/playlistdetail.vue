@@ -14,15 +14,15 @@
       <ul>
         <li>
           <img src="/static/music.png" alt="添加收藏">
-          <span>{{playlist.subscribedCount}}</span>
+          <span v-text="million(playlist.subscribedCount)">0</span>
         </li>
         <li>
           <img src="/static/music.png" alt="评论">
-          <span>{{playlist.commentCount}}</span>
+          <span v-text="million(playlist.commentCount)">0</span>
         </li>
         <li>
           <img src="/static/music.png" alt="转发">
-          <span>{{playlist.shareCount}}</span>
+          <span v-text="million(playlist.shareCount)">0</span>
         </li>
         <li>
           <img src="/static/music.png" alt="下载">
@@ -91,6 +91,21 @@
         },
         async getdjdetails(id){
           let djdetails = await getdjdetail(id)
+        },
+        million(value){
+          function replaceStr(oldStr, childStr){
+            oldStr = oldStr.replace(eval('/'+ childStr +'/g'),'万')
+            return oldStr
+          }
+          value = value +''
+          if(value>9999){
+            var val = value.substr(-4,4)
+            return  replaceStr(value,val)
+          }else if(value=='' || value == "undefined" || value ==null){
+            return 0
+          }else{
+            return value
+          }
         }
       },
       mounted(){

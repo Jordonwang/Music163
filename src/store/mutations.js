@@ -10,7 +10,8 @@ import {
   UPDATE_TOTALTIME,
   UPDATE_SONGLIST,
   UPDATE_CURRENTSONGLISTINDEX,
-  UPDATE_HOMEINIT
+  UPDATE_HOMEINIT,
+  UPDATE_ISPLAYING
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -39,5 +40,8 @@ export default {
   },
   [UPDATE_HOMEINIT](state,isTure){
     return state.homeInit = isTure
+  },
+  [UPDATE_ISPLAYING](state,isplay){
+    return state.isPlaying = isplay
   }
 }
