@@ -33,7 +33,7 @@
     </div>
     <page-trans></page-trans>
 
-    <dialog-info v-if="dialog" contentMsg="Test Msg" :cancle="cancleEvent"></dialog-info>
+    <dialog-info showCancle="false" v-if="dialog" contentMsg="Test Msg" @cancle="cancleEvent" @confirm="confirmevent"></dialog-info>
 
     <footer-view></footer-view>
   </div>
@@ -88,7 +88,11 @@
         this.dialog = true
       },
       cancleEvent(data){
-          console.log(data)
+          console.log(data);
+          this.dialog = false;
+      },
+      confirmevent(){
+        this.dialog = false;
       }
     }
   }

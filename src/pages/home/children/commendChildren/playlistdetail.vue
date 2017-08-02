@@ -43,6 +43,7 @@
       </li>
     </ul>
     <type-loading v-if="loading"></type-loading>
+    <dialog-info v-if="dialog" :contentMsg="contentMsg" @cancle="cancleEvent" @confirm="confirmevent"></dialog-info>
   </div>
 </template>
 <script>
@@ -50,6 +51,7 @@
     import {getRecomdDetails,getdjdetail} from '@/service/getData'
     import typeLoading from '@/components/loading'
     import {mapMutations} from 'vuex'
+    import dialogInfo from '@/components/dialog'
 
     export default{
       data(){
@@ -57,7 +59,9 @@
           id:'',
           playlist:{},
           loading:true,
-          src:''
+          src:'',
+          dialog:false,
+          contentMsg:''
         }
       },
       computed:{
@@ -72,7 +76,7 @@
 
       },
       components:{
-        typeLoading
+        typeLoading,dialogInfo
       },
       methods:{
         ...mapMutations([
@@ -82,12 +86,18 @@
           this.$router.goBack(1)
         },
         async getRecomdDetails(id){
+//            debugger
           let recomdDetails = await getRecomdDetails(id)
           this.playlist = recomdDetails.playlist;
-          this.src = recomdDetails.playlist.coverImgUrl;
-          console.log(recomdDetails.playlist.trackIds)
-          this.UPDATE_SONGLIST(recomdDetails.playlist.trackIds)
-          this.loading=false
+          if(recomdDetails.code!= 200){
+              this.contentMsg = '网络错误!'
+              this.dialog = true;
+          }else{
+            this.src = recomdDetails.playlist.coverImgUrl;
+            console.log(recomdDetails.playlist.trackIds)
+            this.UPDATE_SONGLIST(recomdDetails.playlist.trackIds)
+            this.loading=false
+          }
         },
         async getdjdetails(id){
           let djdetails = await getdjdetail(id)
@@ -106,6 +116,11 @@
           }else{
             return value
           }
+        },
+        confirmevent(){
+          this.contentMsg = ''
+          this.dialog = false;
+          this.$router.replace('/')
         }
       },
       mounted(){

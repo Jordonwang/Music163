@@ -4,7 +4,7 @@
             <p class="header">提示</p>
             <div class="content" v-text="contentMsg">默认消息</div>
             <div class="footer">
-              <button v-text="cleData" @click="cleFn"></button>
+              <button v-if="showCancle" v-text="cleData" @click="cleFn"></button>
               <button v-text="cfmData" @click="cfmFn"></button>
             </div>
         </div>
@@ -18,16 +18,16 @@
           cleData:'取消'
         }
       },
-      props:['contentMsg'],
+      props:['contentMsg','showCancle'],
       mounted(){
 
       },
       methods:{
         cleFn(){
-          this.$emit("cancle",'子组件的数据cancle')
+          this.$emit("cancle","子组件的数据cancle")
         },
         cfmFn(){
-          this.$emit("confirm",'子组件的数据confirm')
+          this.$emit("confirm","子组件的数据confirm")
         }
       }
     }
