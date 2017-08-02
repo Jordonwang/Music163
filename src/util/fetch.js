@@ -13,7 +13,7 @@ import axios from './http'
 
 export default async(url = '', data = {}, type = 'GET') => {
   type = type.toLowerCase();
-  //url = baseUrl + url;
+  // url = axios.defaults.baseURL + url;
 
   return new Promise((resolve, reject) => {
     var request = null

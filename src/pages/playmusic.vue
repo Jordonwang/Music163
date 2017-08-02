@@ -154,7 +154,7 @@
       	var img = document.querySelector('.innerpic').firstChild;
       	var pused = document.querySelector('.innerpic').lastChild;
       	var stop = document.querySelector('#pused');
-        
+
       	if (this.isPlaying) {
       		this.isPlaying = !this.isPlaying
       		play.setAttribute('class','play')
@@ -306,9 +306,8 @@
   }
   .main>.songPic>.outpic{
     margin: 30px;
-    background: url("/static/disc.png");
+    background: url("/static/disc.png") no-repeat;
     background-size: 100% 100%;
-    background-repeat: no-repeat;
     overflow: hidden;
     zoom: 1;
     display: flex;

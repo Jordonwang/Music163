@@ -1,18 +1,35 @@
 <template>
-    <div class="bg">
+    <div class="bg" v-if="">
         <div class="main">
             <p class="header">提示</p>
-            <div class="content">你还未登录,请先登录</div>
+            <div class="content" v-text="contentMsg">默认消息</div>
             <div class="footer">
-              <button>取消</button>
-              <button>确认</button>
+              <button v-text="cleData" @click="cleFn"></button>
+              <button v-text="cfmData" @click="cfmFn"></button>
             </div>
         </div>
     </div>
 </template>
 <script>
     export default{
+      data(){
+        return {
+          cfmData:'确认',
+          cleData:'取消'
+        }
+      },
+      props:['contentMsg'],
+      mounted(){
 
+      },
+      methods:{
+        cleFn(){
+          this.$emit("cancle",'子组件的数据cancle')
+        },
+        cfmFn(){
+          this.$emit("confirm",'子组件的数据confirm')
+        }
+      }
     }
 </script>
 <style scoped>
@@ -30,16 +47,31 @@
   }
   .main{
     width:50%;
-    height: 100px;
     background: #ffffff;
     border-radius: 5px;
     text-align: center;
     position: relative;
+    animation: test .3s;
+    overflow: hidden;
+  }
+  .header{
+    background: rgba(189, 191, 193, 0.24);
+    padding: 2px;
+    font-size: 14px;
+  }
+  .content{
+    padding: 10px;
+    font-size:15px;
+  }
+  @keyframes test {
+    70%{
+      transform: scale(1.1);
+    }
+    100%{
+      transform: scale(1);
+    }
   }
   .footer{
-    position: absolute;
-    bottom: 0;
-    left:0;
     height: 30px;
     width: 100%;
   }

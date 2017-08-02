@@ -1,12 +1,13 @@
 /**
  * Created by Administrator on 2017/7/27 0027.
  */
-import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
+import {getSongUrl,getSonglyric,getSongDetails,getUserList} from '@/service/getData'
 import {
   UPDATE_SONGSRC,
   UPDATE_PLAYINGSONGID,
   UPDATE_PLAYINGSONGIMG,
-  UPDATE_PLAYINGSONGNAME
+  UPDATE_PLAYINGSONGNAME,
+  UPDATE_USERID
 } from './mutation-types'
 
 export default {
@@ -21,5 +22,9 @@ export default {
     commit(UPDATE_PLAYINGSONGID,songdetail.songs[0].id)
     commit(UPDATE_PLAYINGSONGIMG,songdetail.songs[0].al.picUrl)
     commit(UPDATE_PLAYINGSONGNAME,songdetail.songs[0].name)
+  },
+  //更新用户ID
+  async getUserId({commit,state},id){
+    commit(UPDATE_USERID,id)
   }
 }

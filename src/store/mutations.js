@@ -11,7 +11,8 @@ import {
   UPDATE_SONGLIST,
   UPDATE_CURRENTSONGLISTINDEX,
   UPDATE_HOMEINIT,
-  UPDATE_ISPLAYING
+  UPDATE_ISPLAYING,
+  UPDATE_USERID
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -43,5 +44,8 @@ export default {
   },
   [UPDATE_ISPLAYING](state,isplay){
     return state.isPlaying = isplay
+  },
+  [UPDATE_USERID](state,ID){
+    return state.userID = ID
   }
 }

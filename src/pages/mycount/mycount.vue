@@ -10,7 +10,7 @@
     <div class="nav">
       <p class="nav-title">账号</p>
     </div>
-    <div class="header" v-if="!isLogin">
+    <div class="header" v-if="!userID">
         <p class="title">登录网易云音乐</p>
         <p class="desc">手机电脑多端同步,320k高音质无限下载</p>
         <div class="login-wrap">
@@ -18,7 +18,7 @@
         </div>
         <p class="line"></p>
     </div>
-    <div class="header" v-if="isLogin">
+    <div class="header" v-if="userID">
         登录成功
 
       <p class="line"></p>
@@ -74,6 +74,7 @@
 <script>
   import footerView from '@/components/footer'
   import {sendLogin} from '@/service/getData'
+  import {mapState,mapMutations,mapActions} from 'vuex'
   export default{
       data(){
         return {
@@ -148,19 +149,28 @@
         }
       },
     computed: {
-        isLogin() {
-          return localStorage.getItem('isLogin') === true;
+      ...mapState(['userID']),
+      user() {
+          return localStorage.getItem('isLogin') === this.userID;
         }
+    },
+    mounted(){
+      if(localStorage.getItem('isLogin')){
+          this.getUserId(localStorage.getItem('isLogin'))
+      }
     },
     components:{
       footerView
     },
     methods:{
+      ...mapActions(['getUserId']),
       login(){
+         var _this = this;
         let res = sendLogin(this.username,this.userpwd).then(function (res) {
             if(res.code==200){
-              localStorage.setItem('isLogin', 'true');
+              localStorage.setItem('isLogin', res.account.id);
               alert('登录成功')
+              _this.getUserId(res.account.id)
             }else{
               localStorage.setItem('isLogin', 'false');
               alert(res.msg)

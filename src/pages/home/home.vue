@@ -33,13 +33,8 @@
     </div>
     <page-trans></page-trans>
 
-    <dialog-info v-if="dialog"></dialog-info>
+    <dialog-info v-if="dialog" contentMsg="Test Msg" :cancle="cancleEvent"></dialog-info>
 
-    <!--<transition name="router-fade" mode="out-in">-->
-      <!--<keep-alive>-->
-        <!--<router-view></router-view>-->
-      <!--</keep-alive>-->
-    <!--</transition>-->
     <footer-view></footer-view>
   </div>
 </template>
@@ -91,6 +86,9 @@
       },
       dialogTest(){
         this.dialog = true
+      },
+      cancleEvent(data){
+          console.log(data)
       }
     }
   }

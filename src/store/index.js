@@ -19,7 +19,8 @@ const state = {
   isPlaying:false,
   homeInit:false,
   songlist:[],
-  currentSongListIndex:''
+  currentSongListIndex:'',
+  userID:''
 }
 
 export default new Vuex.Store({

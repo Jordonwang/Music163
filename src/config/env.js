@@ -16,9 +16,9 @@ let imgBaseUrl = 'http://images.cangdu.org/';
 
 
 if (process.env.NODE_ENV == 'development') {
-  // baseUrl = 'api'
+  // baseUrl = '/api'
 }else if(process.env.NODE_ENV == 'production'){
-  // baseUrl = 'http://jordon.wang';
+  // baseUrl = '/api';
 }
 
 export {
