@@ -86,62 +86,62 @@
             imgSrc:'/static/icn_mail.png'
         }],
           list2:[{
-            to:'/message',
+            to:'/mycount/message',
             title: '会员中心',
             imgSrc:'/static/icn_vip.png'
           },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '商城',
               imgSrc:'/static/icn_store.png'
           },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '在线听歌免流量',
               imgSrc:'/static/icn_combo.png'
             }],
           list3:[{
-            to:'/message',
+            to:'/mycount/message',
             title: '设置',
-            imgSrc:'static/icn_set.png'
+            imgSrc:'/static/icn_set.png'
           },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '扫一扫',
               imgSrc:'/static/icn_scan.png'
             },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '个性换肤',
               imgSrc:'/static/icn_skin.png'
             },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '夜间模式',
               imgSrc:'/static/icn_night.png'
             },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '定时关闭',
               imgSrc:'/static/icn_time.png'
             },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '音乐闹钟',
               imgSrc:'/static/icn_alamclock.png'
             },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '驾驶模式',
               imgSrc:'/static/icn_vehicle.png'
             }],
           list4:[{
-            to:'/message',
+            to:'/mycount/message',
             title: '分享网易云音乐',
             imgSrc:'/static/icn_share.png'
           },
             {
-              to:'/message',
+              to:'/mycount/message',
               title: '关于',
               imgSrc:'/static/icn_about.png'
             }]

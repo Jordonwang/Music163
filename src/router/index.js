@@ -26,7 +26,7 @@ const playListDetailforTop = r => require.ensure([], () => r(require('@/pages/ho
 
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
 const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
-const message = r => require.ensure([], () => r(require('@/pages/mycount/message')), 'message')
+const message = r => require.ensure([], () => r(require('@/pages/mycount/children/message')), 'message')
 
 var router =  new Router({
   mode:routerMode,
