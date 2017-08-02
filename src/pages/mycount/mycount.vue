@@ -10,13 +10,18 @@
     <div class="nav">
       <p class="nav-title">账号</p>
     </div>
-    <div class="header">
+    <div class="header" v-if="!isLogin">
         <p class="title">登录网易云音乐</p>
         <p class="desc">手机电脑多端同步,320k高音质无限下载</p>
         <div class="login-wrap">
           <button @click="login" class="login-title">立即登录</button>
         </div>
         <p class="line"></p>
+    </div>
+    <div class="header" v-if="isLogin">
+        登录成功
+
+      <p class="line"></p>
     </div>
 
     <div class="list">
@@ -25,7 +30,7 @@
           <router-link :to="val.to">
             <img :src="val.imgSrc" alt="" width="26px" height="24px">
             <span>{{val.title}}</span>
-            <img src="static/right_arrow.png" class="arrow" width="12px" height="16px">
+            <img src="/static/right_arrow.png" class="arrow" width="12px" height="16px">
           </router-link>
         </li>
       </ul>
@@ -74,6 +79,7 @@
         return {
           username:'15014093499',
           userpwd:'zxcvbnm3499',
+
           list1:[{
             to:'/mycount/message',
             title: '我的消息',
@@ -87,12 +93,12 @@
             {
               to:'/message',
               title: '商城',
-              imgSrc:'static/icn_store.png'
+              imgSrc:'/static/icn_store.png'
           },
             {
               to:'/message',
               title: '在线听歌免流量',
-              imgSrc:'static/icn_combo.png'
+              imgSrc:'/static/icn_combo.png'
             }],
           list3:[{
             to:'/message',
@@ -102,45 +108,50 @@
             {
               to:'/message',
               title: '扫一扫',
-              imgSrc:'static/icn_scan.png'
+              imgSrc:'/static/icn_scan.png'
             },
             {
               to:'/message',
               title: '个性换肤',
-              imgSrc:'static/icn_skin.png'
+              imgSrc:'/static/icn_skin.png'
             },
             {
               to:'/message',
               title: '夜间模式',
-              imgSrc:'static/icn_night.png'
+              imgSrc:'/static/icn_night.png'
             },
             {
               to:'/message',
               title: '定时关闭',
-              imgSrc:'static/icn_time.png'
+              imgSrc:'/static/icn_time.png'
             },
             {
               to:'/message',
               title: '音乐闹钟',
-              imgSrc:'static/icn_alamclock.png'
+              imgSrc:'/static/icn_alamclock.png'
             },
             {
               to:'/message',
               title: '驾驶模式',
-              imgSrc:'static/icn_vehicle.png'
+              imgSrc:'/static/icn_vehicle.png'
             }],
           list4:[{
             to:'/message',
             title: '分享网易云音乐',
-            imgSrc:'static/icn_share.png'
+            imgSrc:'/static/icn_share.png'
           },
             {
               to:'/message',
               title: '关于',
-              imgSrc:'static/icn_about.png'
+              imgSrc:'/static/icn_about.png'
             }]
         }
       },
+    computed: {
+        isLogin() {
+          return localStorage.getItem('isLogin') === true;
+        }
+    },
     components:{
       footerView
     },
@@ -148,11 +159,14 @@
       login(){
         let res = sendLogin(this.username,this.userpwd).then(function (res) {
             if(res.code==200){
+              localStorage.setItem('isLogin', 'true');
               alert('登录成功')
             }else{
+              localStorage.setItem('isLogin', 'false');
               alert(res.msg)
             }
         }).catch(function () {
+          localStorage.setItem('isLogin', 'false');
           alert('网络错误!')
         })
       }
@@ -209,7 +223,7 @@
     height: 10px;
   }
   .list{
-    margin-bottom: 55px;
+    margin-bottom: 50px;
     height: 570px;
     background: #f5f5f5;
   }

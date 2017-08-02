@@ -32,7 +32,9 @@
       </ul>
     </div>
     <page-trans></page-trans>
+
     <dialog-info v-if="dialog"></dialog-info>
+
     <!--<transition name="router-fade" mode="out-in">-->
       <!--<keep-alive>-->
         <!--<router-view></router-view>-->
@@ -46,7 +48,9 @@
   import footerView from '@/components/footer'
   import pageTrans from '@/components/pagetransition'
   import { getSearch } from '@/service/getData'
+
   import dialogInfo from '@/components/dialog'
+
 
   export default{
     data(){

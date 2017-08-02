@@ -1,20 +1,25 @@
 <template>
   <div class="rating_page">
+
     <img id="bg" :src="src" alt="">
     <!--<div id="bg" :style="{background:src}"></div>-->
+
     <header>
       <a @click="goBack" href="javascript:void(0)"></a>
       <span>{{type}}</span>
     </header>
     <div class="desc">
+
       <img :src="desc.coverImgUrl" :alt="desc.description" width="30%">
       <p>{{desc.description}}</p>
       <p>标签:<span v-for="v in desc.tags">{{v}},</span></p>
+
     </div>
     <div class="count">
       <ul>
         <li>
           <img src="/static/music.png" alt="添加收藏">
+
           <span v-text="million(desc.subscribedCount)"></span>
         </li>
         <li>
@@ -32,24 +37,31 @@
       </ul>
     </div>
     <ul class="main">
+
       <li>播放全部(共{{desc.trackCount}}首)</li>
       <li v-for="(list,index) in desc.tracks" :keys="index">
         <router-link :to="{path:'/playmusic',query:{id:list.id}}">
           <span>{{index+1}}</span>
           <div>
             <p>{{list.name}}</p>
+
             <p>{{list.artists[0].name}}</p>
+
           </div>
         </router-link>
       </li>
     </ul>
+
     <type-loading v-if="loading"></type-loading>
+
   </div>
 </template>
 <script>
   import route from '@/router'
+
   import Vue from 'vue'
   import {getTopList} from '@/service/getData'
+
   import typeLoading from '@/components/loading'
   import {mapMutations} from 'vuex'
 

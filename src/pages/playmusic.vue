@@ -154,6 +154,7 @@
       	var img = document.querySelector('.innerpic').firstChild;
       	var pused = document.querySelector('.innerpic').lastChild;
       	var stop = document.querySelector('#pused');
+        
       	if (this.isPlaying) {
       		this.isPlaying = !this.isPlaying
       		play.setAttribute('class','play')
