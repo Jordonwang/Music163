@@ -25,13 +25,17 @@
         <!--<router-view></router-view>-->
       <!--</transition>-->
       <footer-view></footer-view>
+      <type-loading v-if="loading"></type-loading>
     </div>
 
 
 </template>
 <script>
+  import Vue from 'vue'
   import footerView from '@/components/footer'
-//  import {sendLogin} from '@/service/getData'
+  import typeLoading from '@/components/loading'
+  import {getUserList} from '@/service/getData'
+
   export default{
     data() {
       return {
@@ -54,11 +58,32 @@
             to:'/message',
             title: '我的收藏',
             imgSrc:'/static/my_icn_fav.png'
-          }]
+          }],
+        playlist:[],
+        loading:true,
       }
     },
     components:{
-      footerView
+      footerView,
+      typeLoading
+    },
+    computed: {
+
+    },
+    mounted() {
+      console.log('mounted')
+      this.initData();
+    },
+    methods:{
+      async initData(){
+        let userList = await getUserList();
+        this.playlist = userList
+
+        this.hideLoading();
+      },
+      hideLoading(){
+        this.loading = false;
+      }
     }
   }
 </script>
@@ -90,8 +115,8 @@
   .list-left{
     display: inline-block;
     width: 10%;
-    margin: 20px 10px;
-
+    margin-left: 10px;
+    margin-right: 10px;
   }
   .img-icon{
     /*margin: 10px 10px;*/
@@ -110,6 +135,10 @@
     right: 10px;
     margin-top: 15px;
     margin-right: 10px;
+  }
+  li{
+    height: 50px;
+    line-height: 0px;
   }
   a{
     text-decoration: none;

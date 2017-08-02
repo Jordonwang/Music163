@@ -71,4 +71,9 @@ export const getTopSongList = (limit) => fetch('/top/playlist/highquality',{
 export const getTopList = (idx) => fetch('/top/list',{
   idx:idx
 })
-
+/*
+* 获取用户歌单
+* */
+export const getUserList = (userId) => fetch('/user/playlist',{
+  uid:userId
+})
