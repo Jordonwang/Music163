@@ -77,3 +77,22 @@ export const getTopList = (idx) => fetch('/top/list',{
 export const getUserList = (userId) => fetch('/user/playlist',{
   uid:userId
 })
+/*
+* 获取动态消息
+* */
+export const getFriendsInfo = () => fetch('/event')
+/*
+ * 获取推荐电台
+ * */
+export const getdjrecommend = () => fetch('/dj/recommend')
+/*
+ * 电台分类
+ * */
+export const getdjcatelist = () => fetch('/dj/catelist')
+
+/*
+ * 电台分类推荐
+ * */
+export const getdjbytype = (type) => fetch('/dj/recommend/type',{
+  type:type
+})
