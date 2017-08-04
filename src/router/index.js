@@ -22,11 +22,11 @@ const RadioStation = r => require.ensure([], () => r(require('@/pages/home/child
 const Scoreboard = r => require.ensure([], () => r(require('@/pages/home/children/Scoreboard')), 'Scoreboard')
 const playListDetail = r => require.ensure([], () => r(require('@/pages/home/children/commendChildren/playlistdetail')), 'playlistdetail')
 const playListDetailforTop = r => require.ensure([], () => r(require('@/pages/home/children/scoreboardChildren/playlistdetailfortop')), 'playListDetailforTop')
-
-
 const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')), 'playMusic')
 const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
 const message = r => require.ensure([], () => r(require('@/pages/mycount/children/message')), 'message')
+const playingMV = r => require.ensure([], () => r(require('@/pages/home/children/commendChildren/playingMV')), 'playingMV')
+
 
 var router =  new Router({
   mode:routerMode,
@@ -41,7 +41,11 @@ var router =  new Router({
       component: Home,
       children:[{
         path:'commend',
-        component:Commend
+        component:Commend,
+        children:[{
+          path:'playingmv',
+          component:playingMV
+        }]
       },{
         path:'musiclist',
         component:MusicList

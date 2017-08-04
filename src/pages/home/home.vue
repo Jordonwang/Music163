@@ -3,7 +3,9 @@
     <div class="head">
       <i @click="dialogTest" v-if="searchIcon" class="el-icon-setting"></i>
       <input v-model="keywords" @click="searchSong" @input="getSearchData" :style="'width:'+searchwidth+'%'" class="search" type="text" placeholder="搜索音乐 歌词 电台">
-      <i v-if="searchIcon" class="el-icon-more"></i>
+      <i v-if="searchIcon">
+        <is-play></is-play>
+      </i>
       <span v-if="!searchIcon" @click="hideSearch" class="close">关闭</span>
     </div>
     <div class="searchDetail" v-if="!searchIcon">
@@ -45,20 +47,21 @@
   import { getSearch } from '@/service/getData'
 
   import dialogInfo from '@/components/dialog'
+  import isPlay from '@/components/playing'
 
 
   export default{
     data(){
       return {
         searchIcon:true,
-        searchwidth:70,
+        searchwidth:76,
         keywords:'',
         searchVal:[],
         dialog:false
       }
     },
     components:{
-        footerView,pageTrans,dialogInfo
+        footerView,pageTrans,dialogInfo,isPlay
     },
     computed:{
     },
@@ -111,11 +114,13 @@
     left: 0;
     z-index: 10;
     width: 100%;
+    box-sizing:border-box;
+    padding:0 5px;
     i{
       color: #fff;
     }
     .search{
-      width:70%;
+      width:76%;
       margin: 3px;
       height: 30px;
       border-radius: 15px;

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <header>朋友动态</header>
+    <header>
+      <is-play></is-play>
+      <p>朋友动态</p>
+      <is-play></is-play>
+    </header>
     <ul>
       <li v-for="(val,index) in infoList">
         <div class="left">
@@ -23,7 +27,7 @@
             <div class="pics">
               <ul>
                 <li v-for="val in val.pics">
-                  <img :src="val.squareUrl" alt="">
+                  <img @click="showImg" :src="val.squareUrl" alt="">
                 </li>
               </ul>
             </div>
@@ -51,6 +55,9 @@
         </div>
       </li>
     </ul>
+    <div class="showImg" v-if="showImgs">
+      <img @click="hideImg" :src="showImgSrc" alt="">
+    </div>
     <type-loading v-if="loading"></type-loading>
     <footer-view></footer-view>
   </div>
@@ -60,6 +67,7 @@
   import {getFriendsInfo} from '@/service/getData'
   import Vue from 'vue'
   import typeLoading from '@/components/loading'
+  import isPlay from '@/components/playing'
 
   Vue.filter('JsonMSG',function (val) {
     var value = JSON.parse(val)
@@ -78,11 +86,13 @@
       return{
         infoList:[],
         videosrc:'',
-        loading:true
+        loading:true,
+        showImgs:false,
+        showImgSrc:''
       }
     },
     components:{
-      footerView,typeLoading
+      footerView,typeLoading,isPlay
     },
     mounted(){
       this.getInfo()
@@ -96,6 +106,13 @@
       playVideo(event){
           console.log(event)
         event.target.setAttribute('autoplay','autoplay')
+      },
+      showImg(e){
+        this.showImgSrc = e.target.currentSrc
+        this.showImgs = true
+      },
+      hideImg(){
+        this.showImgs = false
       }
     }
   }
@@ -104,9 +121,12 @@
   header{
     height:40px;
     line-height: 40px;
-    background: #4b9df5;
+    background: #3CAEEA;
     text-align: center;
     color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center
   }
   ul>li>div{
     display: inline-block;
@@ -135,6 +155,7 @@
     background: #ffffff;
     color: #000000;
     text-align: left;
+    display: block;
   }
   ul>li>.right>header span{
     font-size:14px;
@@ -187,5 +208,29 @@
   .footer>ul>li>img{
     width:24%;
     padding-right: 5px;
+  }
+  .showImg{
+    width:100%;
+    height: 100%;
+    background: rgba(19,14,13,0.8);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  .showImg>img{
+    width:100%;
+    animation: show .5s;
+  }
+  @keyframes show {
+    0%{
+      transform: scale(.3);
+    }
+    100%{
+      transform: scale(1);
+    }
   }
 </style>

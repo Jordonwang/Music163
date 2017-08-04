@@ -33,14 +33,30 @@
         </ul>
       </header>
     </div>
+    <div class="recmdList mv">
+      <header>
+        <p class="header">最新MV</p>
+        <ul>
+          <li v-for="(val,index) in newMV">
+            <router-link :to="{path:'/home/commend/playingmv',query:{id:val.id}}">
+              <img :src="val.cover" :alt="val.name" >
+              <p>{{val.briefDesc}}</p>
+              <p>{{val.artistName}}</p>
+            </router-link>
+          </li>
+        </ul>
+      </header>
+    </div>
+    <transition name="router-slid" mode="out-in">
+      <router-view></router-view>
+    </transition>
     <div class="paddingbtm"></div>
     <type-loading v-if="loading"></type-loading>
-
   </div>
 </template>
 <script>
   import Vue from 'vue'
-  import {getBannerImg,getRecmdList,getNewSong} from '@/service/getData'
+  import {getBannerImg,getRecmdList,getNewSong,getNewMV} from '@/service/getData'
   import typeLoading from '@/components/loading'
   import {mapState,mapMutations} from 'vuex'
 
@@ -50,6 +66,7 @@
         imgSrc:[],
         recommend:[],
         newSong:[],
+        newMV:[],
         loading:true,
       }
     },
@@ -88,6 +105,9 @@
         this.newSong = newSong.result
         this.hideLoading();
         this.UPDATE_HOMEINIT(true)
+
+        let NewMV = await getNewMV()
+        this.newMV = NewMV.data
       },
       hideLoading(){
         this.loading = false;
@@ -96,6 +116,13 @@
   }
 </script>
 <style lang="scss">
+  .router-slid-enter-active, .router-slid-leave-active {
+    transition: all .4s;
+  }
+  .router-slid-enter, .router-slid-leave-active {
+    transform: translate3d(2rem, 0, 0);
+    opacity: 0;
+  }
   .paddingbtm{
     padding-bottom: 50px;
   }
@@ -127,9 +154,20 @@
           height:2.8em;
           line-height: 1.4em;
           overflow: hidden;
+          font-size: 14px;
         }
       }
     }
   }
-
+  .mv{
+    header{
+      ul{
+        li{
+          img{
+            height:90px;
+          }
+        }
+      }
+    }
+  }
 </style>

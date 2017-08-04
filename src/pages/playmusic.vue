@@ -107,7 +107,8 @@
         'UPDATE_PLAYINGSONGNAME',
         'UPDATE_STARTTIME',
         'UPDATE_TOTALTIME',
-        'UPDATE_CURRENTSONGLISTINDEX'
+        'UPDATE_CURRENTSONGLISTINDEX',
+        'UPDATE_ISPLAYING'
       ]),
       ...mapActions([
         'GetSongUrl',
@@ -121,6 +122,7 @@
         this.GetSongUrl(id)
         this.GetSongDetail(id)
         let songlyric = getSonglyric(id)
+        this.UPDATE_ISPLAYING(true)
         this.hideLoading();
       },
       //下一首
@@ -156,6 +158,7 @@
       	var stop = document.querySelector('#pused');
 
       	if (this.isPlaying) {
+          this.UPDATE_ISPLAYING(false)
       		this.isPlaying = !this.isPlaying
       		play.setAttribute('class','play')
       		img.setAttribute('class','stop')
@@ -163,6 +166,7 @@
           stop.src = "/static/play.png"
       		audio.pause()
       	}else{
+          this.UPDATE_ISPLAYING(true)
       		this.isPlaying = !this.isPlaying
       		play.removeAttribute('class')
           pused.removeAttribute('class')

@@ -96,3 +96,21 @@ export const getdjcatelist = () => fetch('/dj/catelist')
 export const getdjbytype = (type) => fetch('/dj/recommend/type',{
   type:type
 })
+/*
+ * 获取MV
+ * */
+export const getNewMV = (limit) => fetch('/mv/first',{
+  limit:6
+})
+/*
+ * 获取MV详细信息
+ * */
+export const getMVdetail = (id) => fetch('/mv',{
+  mvid:id
+})
+/*
+ * 播放MV
+ * */
+export const playMV = (url) => fetch('/mv/url',{
+  url:url
+})
