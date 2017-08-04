@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <div class="recmdList">
+    <div v-if="userID" class="recmdList">
       <header>
         <p class="header">推荐歌单</p>
         <ul>
@@ -57,6 +57,7 @@
       typeLoading
     },
     computed:{
+      ...mapState(['userID'])
     },
     created(){
       console.log('created')
