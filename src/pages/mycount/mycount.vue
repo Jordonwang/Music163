@@ -176,13 +176,10 @@
       },
     computed: {
       ...mapState(['userID']),
-      user() {
-          return localStorage.getItem('isLogin') === this.userID;
-        }
     },
     mounted(){
-      if(localStorage.getItem('isLogin')){
-          this.getUserId(localStorage.getItem('isLogin'))
+      if(localStorage.getItem('userId')){
+          this.getUserId(localStorage.getItem('userId'))
       }
     },
     components:{
@@ -216,15 +213,17 @@
         }
         let res = sendLogin(this.username,this.userpwd).then(function (res) {
             if(res.code==200){
-              localStorage.setItem('isLogin', res.account.id);
+              localStorage.setItem('userId', res.account.id);
               _this.getUserId(res.account.id)
               _this.contentMsg = '登录成功!'
               _this.dialog = true
             }else{
+              localStorage.setItem('userId','');
               _this.contentMsg = res.code
               _this.dialog = true
             }
         }).catch(function () {
+          localStorage.setItem('userId', '');
           _this.contentMsg = '网络错误!'
           _this.dialog = true
         })
