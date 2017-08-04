@@ -19,10 +19,12 @@
         </ul>
       </div>
       <div class="music-list">
-        <div class="created-music" @click="changeCreatedHeight">
-          <img src="/static/icn_drop.png" class="drop-img" width="13px" height="7px">
-          <p class="created-title">我创建的歌单({{createdSongTitle}})</p>
-          <ul>
+        <div class="created-music">
+          <div @click="changeCreatedHeight" class="created-header">
+            <img :class="{'clockwise': isFold}" src="/static/icn_drop.png" class="drop-img" width="13px" height="7px">
+            <p class="created-title">我创建的歌单({{createdSongTitle}})</p>
+          </div>
+          <ul v-show="!isFold">
             <li class="created-count" v-for="val in playlist" v-if="val.ordered==false">
               <router-link :to="{path:'/playlist/detail',query:{id:val.id}}">
                 <div class="songListLeft">
@@ -36,10 +38,12 @@
             </li>
           </ul>
         </div>
-        <div class="collected-music" @click="changeCollectedHeight">
-          <img src="/static/icn_drop.png" class="drop-img" width="13px" height="7px">
+        <div class="collected-music">
+          <div @click="changeCollectedHeight" class="created-header">
+            <img :class="{'clockwise': isExpand}" src="/static/icn_drop.png" class="drop-img" width="13px" height="7px">
             <p class="collected-title">我收藏的歌单({{collectedSongTitle}})</p>
-            <ul>
+          </div>
+            <ul v-show="!isExpand">
               <li class="collected-count" v-for="val in playlist" v-if="val.ordered==true">
                 <router-link :to="{path:'/playlist/detail',query:{id:val.id}}">
                   <div class="songListLeft">
@@ -97,7 +101,9 @@
         loading:true,
         createdSongTitle:'',
         collectedSongTitle:'',
-        isOrdered:false
+        isOrdered:false,
+        isFold:false, // 创建的歌单
+        isExpand:false // 收藏的歌单
       }
     },
     components:{
@@ -131,28 +137,44 @@
         this.loading = false;
       },
       changeCreatedHeight() {
-        var height = document.querySelector('.created-music').style.height;
-        var a = document.getElementsByClassName('drop-img')[0]
-        a.transform()
-        console.log(a)
-        if (height == '25px'){
-          document.querySelector('.created-music').style.height = 'auto'
+//        var height = document.querySelector('.created-music').style.height;
+//        var a = document.getElementsByClassName('drop-img')[0]
+        this.isFold = !this.isFold
+
+//        if (height == '25px'){
+//          document.querySelector('.created-music').style.height = 'auto'
           // 顺时针90
-        }else {
-          document.querySelector('.created-music').style.height = 25 + 'px'
+
+//        }else {
+//          document.querySelector('.created-music').style.height = 25 + 'px'
           // 逆时针90
-        }
+
+//        }
 
       },
       changeCollectedHeight() {
-        var height = document.querySelector('.collected-music').style.height;
-        if (height == '25px'){
-          document.querySelector('.collected-music').style.height = 'auto'
-        }else {
-          document.querySelector('.collected-music').style.height = 25 + 'px'
-        }
+        console.log(1)
+//        var height = document.querySelector('.collected-music').style.height;
+//        var a = document.getElementsByClassName('drop-img')[1]
+        this.isExpand = !this.isExpand;
+        console.log(this.isExpand)
 
-      }
+//        if (height == '25px'){
+//          document.querySelector('.collected-music').style.height = 'auto'
+//          if (a.getAttribute('id') == 'nishizhen2'){
+//            a.removeAttribute('id')
+//          }
+//          a.setAttribute('id', 'shunshizhen2')
+//        }else {
+//          document.querySelector('.collected-music').style.height = 25 + 'px'
+//          if (a.getAttribute('id') == 'shunshizhen2'){
+//            a.removeAttribute('id')
+//          }
+//          a.setAttribute('id', 'nishizhen2')
+//        }
+
+      },
+
     }
   }
 </script>
@@ -225,11 +247,13 @@
   .created-music{
     overflow: hidden;
   }
-  .created-music>.drop-img{
+  .created-music>.created-header{
     margin-left: 10px;
+  }
+  .created-music>.created-header>.drop-img{
     margin-top: 10px;
   }
-  .created-music>.created-title{
+  .created-music>.created-header>.created-title{
     display: inline-block;
     height: 25px;
     margin-top: 5px;
@@ -243,11 +267,13 @@
   .collected-music{
     overflow: hidden;
   }
-  .collected-music>.drop-img{
+  .collected-music>.created-header{
     margin-left: 10px;
+  }
+  .collected-music>.created-header>.drop-img{
     margin-top: 10px;
   }
-  .collected-music>.collected-title{
+  .collected-music>.created-header>.collected-title{
     display: inline-block;
     height: 25px;
     margin-top: 5px;
@@ -290,5 +316,16 @@
     color: darkgrey;
     margin-top: -5px;
   }
+  /*#shunshizhen{*/
+    /*transform: rotate(0deg);*/
+    /*margin-left: 10px;*/
+    /*margin-top: 10px;*/
+  /*}*/
+  .clockwise{
+    transform: rotate(-90deg);
+    margin-top: 10px;
+  }
+
+
 
 </style>
