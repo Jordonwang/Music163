@@ -150,13 +150,10 @@
       },
     computed: {
       ...mapState(['userID']),
-      user() {
-          return localStorage.getItem('isLogin') === this.userID;
-        }
     },
     mounted(){
-      if(localStorage.getItem('isLogin')){
-          this.getUserId(localStorage.getItem('isLogin'))
+      if(localStorage.getItem('userId')){
+          this.getUserId(localStorage.getItem('userId'))
       }
     },
     components:{
@@ -168,15 +165,15 @@
          var _this = this;
         let res = sendLogin(this.username,this.userpwd).then(function (res) {
             if(res.code==200){
-              localStorage.setItem('isLogin', res.account.id);
+              localStorage.setItem('userId', res.account.id);
               alert('登录成功')
               _this.getUserId(res.account.id)
             }else{
-              localStorage.setItem('isLogin', 'false');
+              localStorage.setItem('userId', '');
               alert(res.msg)
             }
         }).catch(function () {
-          localStorage.setItem('isLogin', 'false');
+          localStorage.setItem('userId', '');
           alert('网络错误!')
         })
       }
