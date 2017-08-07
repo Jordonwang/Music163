@@ -193,12 +193,12 @@
       loginOut(){
         this.contentMsg = '退出成功!'
         this.dialog = true
-        localStorage.removeItem('isLogin')
+        localStorage.removeItem('userId')
         this.getUserId('')
       },
       confirmevent(){
         this.dialog = false
-        if(localStorage.getItem('isLogin')){
+        if(localStorage.getItem('userId')){
           this.top = '100%'
           this.phonelogin = false
           this.$router.push('/mycount')

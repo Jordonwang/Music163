@@ -316,11 +316,6 @@
     color: darkgrey;
     margin-top: -5px;
   }
-  /*#shunshizhen{*/
-    /*transform: rotate(0deg);*/
-    /*margin-left: 10px;*/
-    /*margin-top: 10px;*/
-  /*}*/
   .clockwise{
     transform: rotate(-90deg);
     margin-top: 10px;
