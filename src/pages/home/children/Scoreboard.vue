@@ -107,16 +107,15 @@
       display:block;
       margin-bottom:5px;
       a{
-        display:flex;
+        display: flex;
         text-decoration:none;
         color:#000;
         div{
           width:120px;
           height:120px;
-          display: inline-block;
+          display: inline-flex;
           font-family: "cursive";
           font-size:18px;
-          display: flex;
           justify-content: center;
           align-items: center;
           color: #ffffff;
@@ -127,7 +126,11 @@
           padding-left: 10px;
           li{
             padding: 5px 0;
-            border-bottom:none
+            border-bottom:none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 200px;
           }
         }
       }

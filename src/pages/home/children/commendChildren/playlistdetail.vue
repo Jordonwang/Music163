@@ -8,9 +8,9 @@
     <div class="desc">
       <img :src="playlist.coverImgUrl" :alt="playlist.description" width="30%">
       <p>{{playlist.name}}</p>
-      <p>标签:<span v-for="val in playlist.tags">{{val}},</span></p>
+      <p v-if="playlist.tags">标签:<span v-for="val in playlist.tags">{{val}},</span></p>
     </div>
-    <div class="count">
+    <div v-if="playlist.subscribedCount" class="count">
       <ul>
         <li>
           <img src="/static/music.png" alt="添加收藏">
@@ -31,7 +31,7 @@
       </ul>
     </div>
     <ul class="main">
-      <li>播放全部(共{{playlist.trackCount}}首)</li>
+      <li v-if="playlist.trackCount">播放全部(共{{playlist.trackCount}}首)</li>
       <li v-for="(list,index) in playlist.tracks" :keys="index">
         <router-link :to="{path:'/playmusic',query:{id:list.id}}">
           <span>{{index+1}}</span>

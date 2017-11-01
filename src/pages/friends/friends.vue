@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="footer">
-            <p v-text="val.rcmdInfo.reason"></p>
+            <p v-if="val.rcmdInfo.reason" v-text="val.rcmdInfo.reason"></p>
             <ul>
               <li>
                 <img src="/static/friendslove.png" alt="">

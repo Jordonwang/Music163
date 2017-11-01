@@ -7,7 +7,8 @@ import {
   UPDATE_PLAYINGSONGID,
   UPDATE_PLAYINGSONGIMG,
   UPDATE_PLAYINGSONGNAME,
-  UPDATE_USERID
+  UPDATE_USERID,
+  UPDATE_AVATARURL
 } from './mutation-types'
 
 export default {
@@ -26,5 +27,9 @@ export default {
   //更新用户ID
   async getUserId({commit,state},id){
     commit(UPDATE_USERID,id)
+  },
+  //更新用户头像
+  async setUserAvatarUrl({commit,state},url){
+    commit(UPDATE_AVATARURL,url)
   }
 }

@@ -12,7 +12,9 @@ import {
   UPDATE_CURRENTSONGLISTINDEX,
   UPDATE_HOMEINIT,
   UPDATE_ISPLAYING,
-  UPDATE_USERID
+  UPDATE_USERID,
+  UPDATE_AVATARURL,
+  UPDATE_LOADING
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -47,5 +49,11 @@ export default {
   },
   [UPDATE_USERID](state,ID){
     return state.userID = ID
+  },
+  [UPDATE_AVATARURL](state,url){
+    return state.avatarUrl = url
+  },
+  [UPDATE_LOADING](state,flag){
+    return state.loading = flag
   }
 }

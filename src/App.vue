@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <audio id="audio" autoplay :src="songSrc" @timeupdate="initProcess"></audio>
+    <type-loading v-if="loading"></type-loading>
     <div class="welcome animated fadeOut" v-if="!homeInit">
       <img src="/static/welcome.png" alt="">
     </div>
@@ -15,6 +16,7 @@
 <script>
   import Vue from 'vue'
   import store from './store'
+  import typeLoading from '@/components/loading'
   import {mapState, mapMutations} from 'vuex'
 
 export default {
@@ -23,8 +25,11 @@ export default {
       return {
       }
   },
+  components:{
+    typeLoading
+  },
   computed:{
-      ...mapState(['songSrc','startTime','totalTime','homeInit'])
+      ...mapState(['songSrc','startTime','totalTime','homeInit','loading'])
   },
   methods:{
     ...mapMutations([

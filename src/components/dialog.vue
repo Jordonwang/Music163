@@ -14,8 +14,8 @@
     export default{
       data(){
         return {
-          cfmData:'确认',
-          cleData:'取消'
+          cfmData:'确 认',
+          cleData:'取 消'
         }
       },
       props:['contentMsg','showCancle'],
@@ -46,7 +46,7 @@
     align-items: center;
   }
   .main{
-    width:50%;
+    width:70%;
     background: #ffffff;
     border-radius: 5px;
     text-align: center;
@@ -56,11 +56,11 @@
   }
   .header{
     background: rgba(189, 191, 193, 0.24);
-    padding: 2px;
+    padding: 10px;
     font-size: 14px;
   }
   .content{
-    padding: 10px;
+    padding: 20px 0;
     font-size:15px;
   }
   @keyframes test {
@@ -72,7 +72,7 @@
     }
   }
   .footer{
-    height: 30px;
+    height: 40px;
     width: 100%;
   }
   .footer>button{
@@ -83,5 +83,6 @@
     display: inline-block;
     height: 100%;
     background: #fff;
+    font-size: 18px;
   }
 </style>
