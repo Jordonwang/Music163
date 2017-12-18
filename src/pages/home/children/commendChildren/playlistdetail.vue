@@ -90,8 +90,9 @@
           let recomdDetails = await getRecomdDetails(id)
           this.playlist = recomdDetails.playlist;
           if(recomdDetails.code!= 200){
-              this.contentMsg = '网络错误!'
-              this.dialog = true;
+              this.$dialog.alert({mes:recomdDetails.msg,callback:()=>{
+                  this.goBack()
+                }});
           }else{
             this.src = recomdDetails.playlist.coverImgUrl;
             console.log(recomdDetails.playlist.trackIds)
@@ -123,14 +124,11 @@
           this.$router.replace('/')
         }
       },
+      created(){
+      },
       mounted(){
-
         this.id = this.$route.query.id;
-//        if(this.type=='dj'){
-//          this.getdjdetails(this.ids)
-//        }else{
-          this.getRecomdDetails(this.ids)
-//        }
+        this.getRecomdDetails(this.ids)
       },
       watch:{
        '$route':function (to) {

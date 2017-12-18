@@ -25,7 +25,7 @@
       </div>
       <div class="process">
       	<span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
-      	<div><span id="process" :style="'width:'+processWidth+'%'"><i></i></span></div>
+      	<div><span id="process" :style="'width:'+processWidth+'%'"><i @touchend="ctrlProgressEnd" @touchstart="ctrlProgress"></i></span></div>
       	<span v-text="totalT" v-if="totalT=='NaN:NaN'?totalT='00:00':totalT">00:00</span>
       </div>
       <div class="setting">
@@ -56,7 +56,8 @@
         src:'',
         audio:false,
         isPlaying:true,
-        playingSrc:''
+        playingSrc:'',
+        curTime:0
       }
     },
     computed:{
@@ -65,6 +66,15 @@
         return this.$route.query.id
       },
       processWidth () {
+        if((this.startTime==this.totalTime) && this.startTime>0){
+          if(this.songlist.length>0){
+            this.nextSong()
+          }else{
+            var audio = document.querySelector('#audio');
+            this.UPDATE_STARTTIME(0)
+            audio.currentTime = 0
+          }
+        }
         return (this.startTime/this.totalTime)*100
       },
       startT () {
@@ -114,6 +124,31 @@
         'GetSongUrl',
         'GetSongDetail'
       ]),
+      ctrlProgressEnd(){
+        var audio = document.querySelector('#audio');
+        this.UPDATE_STARTTIME(this.curTime)
+        audio.currentTime = this.curTime
+        this.UPDATE_ISPLAYING(true)
+      },
+      ctrlProgress(ev){
+        var audio = document.querySelector('#audio');
+        var process = document.querySelector('#process')
+        var processParent = document.querySelector('#process').parentNode.clientWidth;
+        var processLeft = document.querySelector('#process').parentNode.offsetLeft;
+        var _this = this;
+        this.UPDATE_ISPLAYING(false)
+        ev.target.addEventListener('touchmove',(ev)=>{
+          let l = ev.changedTouches[0].clientX
+          if(l>(processParent+processLeft)) {
+            process.style.width = processParent +'px'
+          } else if(l<processLeft){
+            process.style.width = '0px'
+          } else{
+            process.style.width = l-processLeft + 'px'
+          }
+          _this.curTime = (l-processLeft)/processParent*audio.duration
+        })
+      },
       goBack(){
         route.isBack = 2
         route.goBack()
@@ -127,6 +162,13 @@
       },
       //下一首
       nextSong(){
+        this.$dialog.confirm({
+          title: '选填标题',
+          mes: '我有一个小毛驴我从来也不骑！',
+          opts: () => {
+            this.$dialog.toast({mes: '你点了确定', timeout: 1000});
+          }
+        });
         let index = this.currentSongListIndex
         if(index == this.songlist.length-1){
             index = 0
@@ -343,6 +385,7 @@
   	width: 0px;
   	background: #168bf5;
     position: relative;
+    transition: all 0.1s;
   }
   .process>div>span>i{
     width: 14px;
@@ -350,7 +393,7 @@
     background: #fff;
     display: block;
     position: absolute;
-    right: 0;
+    right: -7px;
     top: -6px;
     border-radius: 50%;
   }
