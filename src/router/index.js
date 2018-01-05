@@ -26,6 +26,8 @@ const playMusic = r => require.ensure([], () => r(require('@/pages/playMusic')),
 const pageTransition = r => require.ensure([], () => r(require('@/components/pagetransition')), 'pagetransition')
 const message = r => require.ensure([], () => r(require('@/pages/mycount/children/message')), 'message')
 const playingMV = r => require.ensure([], () => r(require('@/pages/home/children/commendChildren/playingMV')), 'playingMV')
+const musicComment = r => require.ensure([], () => r(require('@/pages/musicComment')), 'musicComment')
+
 
 
 var router =  new Router({
@@ -33,6 +35,11 @@ var router =  new Router({
   routes: [
     {
       path: '/',
+      redirect:'/home/commend',
+      component:pageTransition
+    },
+    {
+      path: '/home',
       redirect:'/home/commend',
       component:pageTransition
     },
@@ -89,6 +96,12 @@ var router =  new Router({
       path:'/playmusic',
       name:'playMusic',
       component:playMusic
+    },
+    {
+      path:'/musicComment/:id',
+      name:'musicComment',
+      component:musicComment,
+
     },
     {
       path: '*',

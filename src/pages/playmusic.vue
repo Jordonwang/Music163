@@ -19,7 +19,7 @@
         <ul>
           <li><img src="/static/heart.png" alt=""></li>
           <li><img src="/static/dwn.png" alt=""></li>
-          <li><img src="/static/comment.png" alt=""></li>
+          <router-link tag="li" :to="'/musicComment/'+id"><img  src="/static/comment.png" alt=""></router-link>
           <li><img src="/static/more.png" alt=""></li>
         </ul>
       </div>
@@ -41,6 +41,7 @@
       <span></span>
     </div>
 	  <type-loading v-if="loading"></type-loading>
+    <router-view></router-view>
 	</div>
 </template>
 <script>
@@ -48,6 +49,12 @@
   import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
   import typeLoading from '@/components/loading'
   import {mapState,mapMutations,mapActions} from 'vuex'
+  // route.beforeEach((to, from, next) => {
+  //   // ...
+  //   console.log(to)
+  //   console.log('to')
+  //
+  // })
   export default{
     data(){
       return {
@@ -162,13 +169,7 @@
       },
       //下一首
       nextSong(){
-        this.$dialog.confirm({
-          title: '选填标题',
-          mes: '我有一个小毛驴我从来也不骑！',
-          opts: () => {
-            this.$dialog.toast({mes: '你点了确定', timeout: 1000});
-          }
-        });
+
         let index = this.currentSongListIndex
         if(index == this.songlist.length-1){
             index = 0
@@ -230,14 +231,16 @@
       }
     },
     watch:{
-     '$route':function (to) {
-       if(to.path=='/playmusic'){
-           console.log('this.playingSongId++++'+this.playingSongId)
-           console.log('this.id++++'+this.id)
-         if(!(this.playingSongId === this.id)){
-           window.location.reload()
-         }
-       }
+     '$route':function (to,from,next) {
+       console.log(to)
+       console.log(from)
+       // if(to.path=='/playmusic'){
+       //     console.log('this.playingSongId++++'+this.playingSongId)
+       //     console.log('this.id++++'+this.id)
+       //   if(!(this.playingSongId === this.id)){
+       //     window.location.reload()
+       //   }
+       // }
      }
     }
   }

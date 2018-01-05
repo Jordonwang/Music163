@@ -114,3 +114,11 @@ export const getMVdetail = (id) => fetch('/mv',{
 export const playMV = (url) => fetch('/mv/url',{
   url:url
 })
+/*
+* 获取歌曲评论
+* */
+export const getMusicComment = (id,offset) => fetch('/comment/music',{
+  id:id,
+  limit:offset || 20,
+  offset:offset || 0
+})

@@ -14,7 +14,8 @@ import {
   UPDATE_ISPLAYING,
   UPDATE_USERID,
   UPDATE_AVATARURL,
-  UPDATE_LOADING
+  UPDATE_LOADING,
+  UPDATE_PLAYINGSONGART
 } from './mutation-types'
 export default {
   [UPDATE_SONGSRC](state,songsrc){
@@ -55,5 +56,8 @@ export default {
   },
   [UPDATE_LOADING](state,flag){
     return state.loading = flag
+  },
+  [UPDATE_PLAYINGSONGART](state,art){
+    return state.art = art
   }
 }

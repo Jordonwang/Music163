@@ -22,7 +22,8 @@ const state = {
   avatarUrl:'',
   currentSongListIndex:'',
   userID:'',
-  loading:false
+  loading:false,
+  art:''
 }
 
 export default new Vuex.Store({

@@ -5,7 +5,12 @@ import App from './App'
 import router from './router'
 // import ElementUI from 'element-ui'
 import store from './store'
+import YDUI from 'vue-ydui';
+import 'vue-ydui/dist/ydui.rem.css';
+// import 'vue-ydui/dist/ydui.px.css'
 import { Confirm, Alert, Toast, Notify, Loading } from 'vue-ydui/dist/lib.rem/dialog';
+
+Vue.use(YDUI);
 
 Vue.config.productionTip = false
 // Vue.use(ElementUI)
@@ -18,6 +23,9 @@ Vue.prototype.$dialog = {
   notify: Notify,
   loading: Loading,
 };
+
+
+
 
 new Vue({
   el: '#app',

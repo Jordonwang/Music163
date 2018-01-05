@@ -2,6 +2,7 @@
   <div>
     <p>404</p>
     <p>Page not found</p>
+    <div @click="test">test</div>
     <a href="/">HOME</a>
   </div>
 </template>
@@ -15,7 +16,9 @@
       }
     },
     methods:{
-
+      test(){
+        this.$router.push('/musicComment')
+      }
     },
     created(){
 
