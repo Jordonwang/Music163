@@ -234,13 +234,14 @@
      '$route':function (to,from,next) {
        console.log(to)
        console.log(from)
-       // if(to.path=='/playmusic'){
-       //     console.log('this.playingSongId++++'+this.playingSongId)
-       //     console.log('this.id++++'+this.id)
-       //   if(!(this.playingSongId === this.id)){
-       //     window.location.reload()
-       //   }
-       // }
+       if(to.path=='/playmusic'){
+           console.log('this.playingSongId++++'+this.playingSongId)
+         console.log('this.id++++'+this.id)
+         console.log('this.paramsId++++'+from.params.id)
+         if(!(this.playingSongId === this.id || from.params.id ==this.playingSongId)){
+           window.location.reload()
+         }
+       }
      }
     }
   }

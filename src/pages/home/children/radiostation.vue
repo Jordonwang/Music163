@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-  import {getdjrecommend,getdjcatelist} from '@/service/getdata'
+  import {getdjrecommend,getdjcatelist} from '@/service/getData'
   export default{
     data(){
       return{

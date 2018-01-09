@@ -1,11 +1,12 @@
 <template>
     <div class="main">
-      <yd-navbar title="NavBar" bgcolor="#3CAEEA" color="#ffffff">
+      <scroller :on-refresh="refresh" :on-infinite="infinite" ref="myscroller" noDataText="暂时没数据啦">
+      <yd-navbar :title="'评论('+ total +')'" bgcolor="#3CAEEA" color="#ffffff">
         <div @click="goBack" slot="left">
           <yd-navbar-back-icon color="#ffffff"></yd-navbar-back-icon>
         </div>
       </yd-navbar>
-      <div class="head">
+      <div class="hed">
         <div class="l">
           <img :src="songImg" alt="">
         </div>
@@ -14,7 +15,7 @@
           <span>{{ar}}</span>
         </div>
       </div>
-      <div class="hot">热门评论</div>
+      <div class="hot" v-if="hotComments.length>0">热门评论</div>
       <ul>
         <li class="list" v-for="hComments in hotComments">
           <div class="l">
@@ -35,8 +36,9 @@
           </div>
         </li>
       </ul>
-      <div class="hot">最新评论</div>
-      <ul>
+      <div class="hot" v-if="commentList.length>0">最新评论</div>
+
+        <ul>
         <li class="list" v-for="hComments in commentList">
           <div class="l">
             <img width="100%" :src="hComments.user.avatarUrl" alt="">
@@ -56,19 +58,28 @@
           </div>
         </li>
       </ul>
+
+      <p class="noComment" v-if="commentList.length==0">暂无评论哦</p>
+      </scroller>
     </div>
 </template>
 
 <script>
     import {getSongUrl,getSongDetails,getMusicComment} from '@/service/getData'
     import {mapState,mapMutations,mapActions} from 'vuex'
+    import Vue from 'vue'
+    import VueScroller from 'vue-scroller'
+    Vue.use(VueScroller)
+
     export default {
         name: "music-comment",
         data(){
           return {
             commentList : [],
             hotComments:[],
-            total:'0'
+            total:'0',
+            currentPage:1,
+            noData:''
           }
         },
         computed:{
@@ -78,14 +89,55 @@
           },
           ar(){
             var arr = ''
-            this.art.forEach(function (i) {
-              arr+=i+' '
-            })
+            if(this.art){
+              this.art.forEach(function (i) {
+                arr+=i+' '
+              })
+            }
+
             return arr
           }
         },
       methods:{
           ...mapActions(['']),
+        async infinite(done) {
+          if(this.noData) {
+            setTimeout(()=>{
+              this.$refs.myscroller.finishInfinite(2);
+            })
+            return;
+          }
+          let self = this;//this指向问题
+
+          setTimeout(() => {
+              getMusicComment(this.id,self.currentPage).then(function (res) {
+
+              if(res.comments.length>0){
+                let len = res.comments.length
+                for(var i =0;i<len;i++){
+                  self.commentList.push(res.comments[i])
+                }
+                self.currentPage++
+              }else{
+                self.noData= '暂无更多数据'
+              }
+                self.$refs.myscroller.resize();
+                done()
+            })
+          }, 1500)
+        },
+        refresh() {
+          console.log('refresh')
+          var _this = this
+          getMusicComment(this.id).then(function (res) {
+            if(res.comments.length>0){
+              _this.commentList = res.comments
+              _this.hotComments = res.hotComments
+              _this.total = res.total
+              _this.$refs.myscroller.finishPullToRefresh()
+            }
+          })
+        },
           goBack(){
             this.$router.go(-1)
           },
@@ -105,20 +157,12 @@
           var year=now.getFullYear();
           var month=now.getMonth()+1;
           var date=now.getDate();
-          // var hour=now.getHours();
-          // var minute=now.getMinutes();
-          // var second=now.getSeconds();
           return year+"年"+month+"月"+date+"日"
-
-    //       var d=new Date(1230999938);
-    // return 'q'
         }
         },
         created(){
-
         },
         mounted(){
-          console.log(this.art)
           this.getComment(this.id)
         }
     }
@@ -128,7 +172,7 @@
   .main{
     background: #fff;
   }
-.head{
+.hed{
   padding: 0.2rem;
   box-sizing: border-box;
   display: flex;
@@ -214,5 +258,9 @@
     .r{
       border-bottom:none
     }
+  }
+  .noComment{
+    text-align: center;
+    padding: 0.1rem;
   }
 </style>

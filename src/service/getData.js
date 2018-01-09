@@ -119,6 +119,6 @@ export const playMV = (url) => fetch('/mv/url',{
 * */
 export const getMusicComment = (id,offset) => fetch('/comment/music',{
   id:id,
-  limit:offset || 20,
-  offset:offset || 0
+  limit:20,
+  offset:offset*20 || 0
 })

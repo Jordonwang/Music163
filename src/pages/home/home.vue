@@ -152,7 +152,7 @@
   .nav{
     background: rgba(248, 248, 250, 0.86);
     position: fixed;
-    top: 38px;
+    top: 36px;
     left: 0;
     z-index: 4;
     width: 100%;

@@ -15,7 +15,7 @@ export default async(url = '', data = {}, type = 'GET') => {
   type = type.toLowerCase();
   // url = axios.defaults.baseURL + url;
   store.commit('UPDATE_LOADING',true)
-  console.log(store)
+
   return new Promise((resolve, reject) => {
 
     var request = null
@@ -37,7 +37,7 @@ export default async(url = '', data = {}, type = 'GET') => {
     request.then(response =>{
       // loading
       // 如果http状态码正常，则直接返回数据
-      console.log('请求结束')
+
       store.commit('UPDATE_LOADING',false)
       if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
         resolve(response.data);

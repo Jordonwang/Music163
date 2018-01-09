@@ -49,6 +49,8 @@ var router =  new Router({
       children:[{
         path:'commend',
         component:Commend,
+        name:'pageTransition',
+        meta:{ keepAlive: true},
         children:[{
           path:'playingmv',
           component:playingMV

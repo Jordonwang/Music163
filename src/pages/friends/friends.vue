@@ -103,6 +103,12 @@
     methods:{
       async getInfo(){
         let list = await getFriendsInfo()
+        console.log(list)
+        if(list.code==301){
+          this.$dialog.alert({mes: '数据获取失败',callback: () => {
+               this.$router.push('/mycount')
+            }})
+        }
         this.infoList = list.event
         this.loading = false
       },

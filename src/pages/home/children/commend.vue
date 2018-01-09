@@ -61,6 +61,7 @@
   import {mapState,mapMutations} from 'vuex'
 
   export default{
+    name:'pageTransition',
     data(){
       return {
         imgSrc:[],
@@ -112,6 +113,9 @@
       hideLoading(){
         this.loading = false;
       }
+    },
+    activated(){
+      console.log('activated')
     }
   }
 </script>
@@ -129,13 +133,13 @@
   .recmdList{
     .header{
       padding-left: 10px;
-      margin: 10px;
-      font-size:18px;
-      border-left: 1px solid #ccc;
+      margin: 10px 10px 10px 0;
+      font-size:16px;
+      border-left: 5px solid #3ca9f3;
     }
     ul
       li{
-      width:30%;
+      width:33%;
       padding: 0 1.5%;
       display:inline-block;
       a{
