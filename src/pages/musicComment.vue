@@ -151,14 +151,14 @@
           }
         },
         filters: {
-        time: function (now) {
-          if (!now) return ''
-          now = new Date(now)
-          var year=now.getFullYear();
-          var month=now.getMonth()+1;
-          var date=now.getDate();
-          return year+"年"+month+"月"+date+"日"
-        }
+          time: function (now) {
+            if (!now) return ''
+            now = new Date(now)
+            var year=now.getFullYear();
+            var month=now.getMonth()+1;
+            var date=now.getDate();
+            return year+"年"+month+"月"+date+"日"
+          }
         },
         created(){
         },

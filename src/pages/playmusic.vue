@@ -11,15 +11,17 @@
         <div class="songPic" v-show="!showlyric">
           <div class="outpic" :style="'height:'+outpicWidth+'px'">
             <div class="innerpic" @click="showlyric = !showlyric">
-                <img :src="songImg" alt="img">
+                <img :src="songImg" alt="">
                 <div></div>
             </div>
           </div>
         </div>
       </transition>
       <div class="lyric animated fadeInUp" v-show="showlyric" @click="showlyric = !showlyric">
-        <p v-if="lyric.length>0" v-for="lyr in lyric">{{lyr}}</p>
-        <p v-if="lyric.length==0">轻音乐，暂无歌词</p>
+        <div>
+          <p @click="ddd" v-if="lyric.length>0" v-for="lyr in lyric" :class="(lyr.time<startTime)?'active':''">{{lyr.lyc}}</p>
+          <p v-if="lyric.length==0">轻音乐，暂无歌词</p>
+        </div>
       </div>
       <div class="more" v-show="!showlyric">
         <ul>
@@ -53,12 +55,6 @@
   import {getSongUrl,getSonglyric,getSongDetails} from '@/service/getData'
   import typeLoading from '@/components/loading'
   import {mapState,mapMutations,mapActions} from 'vuex'
-  // route.beforeEach((to, from, next) => {
-  //   // ...
-  //   console.log(to)
-  //   console.log('to')
-  //
-  // })
   export default{
     data(){
       return {
@@ -89,7 +85,8 @@
             audio.currentTime = 0
           }
         }
-        return (this.startTime/this.totalTime)*100
+        let val = (this.startTime/this.totalTime)*100
+        return val.toFixed(2)
       },
       startT () {
         if(this.changeTime(this.startTime)=='NaN:NaN'){
@@ -137,6 +134,9 @@
         'GetSongUrl',
         'GetSongDetail'
       ]),
+      ddd(e){
+        console.log(e)
+      },
       ctrlProgressEnd(){
         var audio = document.querySelector('#audio');
         this.UPDATE_STARTTIME(this.curTime)
@@ -153,11 +153,11 @@
         ev.target.addEventListener('touchmove',(ev)=>{
           let l = ev.changedTouches[0].clientX
           if(l>(processParent+processLeft)) {
-            process.style.width = processParent +'px'
+            process.style.width = processParent.toFixed(2) +'px'
           } else if(l<processLeft){
             process.style.width = '0px'
           } else{
-            process.style.width = l-processLeft + 'px'
+            process.style.width = l-processLeft.toFixed(2) + 'px'
           }
           _this.curTime = (l-processLeft)/processParent*audio.duration
         })
@@ -166,16 +166,34 @@
         route.isBack = 2
         route.goBack()
       },
+      trlycTime(arr,r){
+          if(arr){
+            console.log(arr)
+            let obj = []
+            arr.forEach(function (v,i) {
+              let minute = Number(v.substring(1,3))*60
+              let second = Number(v.substring(4,6))
+              console.log(minute+second)
+              obj.push({
+                time:minute+second,
+                lyc:r[i+1]
+              })
+            })
+            this.lyric = obj
+          }
+      },
       initData(id){
         var _this = this;
         this.GetSongUrl(id)
         this.GetSongDetail(id)
         getSonglyric(id).then(function (res) {
-          if(res.qfy || res.sfy){
+          if(res.qfy && res.sfy){
             // _this.lyric = '轻音乐，无歌词'
           }else{
             let r = res.lrc.lyric.split(/\[[^\]]*\]/)
-            _this.lyric = r
+            console.log(res.lrc.lyric.match(/\[[^\]]*\]/g))
+            _this.trlycTime(res.lrc.lyric.match(/\[[^\]]*\]/g),r)
+            // _this.lyric = r
           }
         })
         this.UPDATE_ISPLAYING(true)
@@ -264,7 +282,10 @@
            window.location.reload()
          }
        }
-     }
+     },
+      'startTime':function (to,from) {
+          console.log(to,from)
+      }
     }
   }
 </script>
@@ -485,6 +506,13 @@
     /*animation: showlyc 1s linear;*/
     animation-delay:1s;
     overflow: scroll;
+    color: #bebebe;
+  }
+  .lyric p{
+    padding: 0.1rem 0;
+  }
+  .lyric .active{
+    color: #ffffff;
   }
   @keyframes showlyc {
     0%{
