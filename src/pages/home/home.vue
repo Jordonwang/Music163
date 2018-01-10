@@ -127,6 +127,7 @@
       border: 1px solid #3CAEEA;
       text-indent: 68px;
       transition: all .3s;
+      background: #ffffff;
     }
     .close{
       line-height: 100%;

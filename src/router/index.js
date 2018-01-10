@@ -36,16 +36,19 @@ var router =  new Router({
     {
       path: '/',
       redirect:'/home/commend',
+      meta:{ keepAlive: true},
       component:pageTransition
     },
     {
       path: '/home',
       redirect:'/home/commend',
+      meta:{ keepAlive: true},
       component:pageTransition
     },
     {
       path: '/home',
       component: Home,
+      meta:{ keepAlive: true},
       children:[{
         path:'commend',
         component:Commend,
@@ -53,16 +56,20 @@ var router =  new Router({
         meta:{ keepAlive: true},
         children:[{
           path:'playingmv',
+          meta:{ keepAlive: true},
           component:playingMV
         }]
       },{
         path:'musiclist',
+        meta:{ keepAlive: true},
         component:MusicList
       },{
         path:'radiostation',
+        meta:{ keepAlive: true},
         component:RadioStation
       },{
         path:'Scoreboard',
+        meta:{ keepAlive: true},
         component:Scoreboard,
         children:[{
           path:'detail',
@@ -73,37 +80,43 @@ var router =  new Router({
     {
       path: '/friends',
       name: 'Friends',
+      meta:{ keepAlive: false},
       component: Friends
     },
     {
       path: '/mymusic',
       name: 'MyMusic',
+      meta:{ keepAlive: true},
       component: MyMusic
     },
     {
       path: '/mycount',
       name: 'MyCount',
+      meta:{ keepAlive: true},
       component: MyCount,
       children:[{
         path:'message',
+        meta:{ keepAlive: true},
         component:message
       }]
     },
     {
       path:'/playlist/detail',
       name:'playlistdetail',
+      meta:{ keepAlive: true},
       component:playListDetail,
     },
     {
       path:'/playmusic',
       name:'playMusic',
+      meta:{ keepAlive: true},
       component:playMusic
     },
     {
       path:'/musicComment/:id',
       name:'musicComment',
-      component:musicComment,
-
+      meta:{ keepAlive: true},
+      component:musicComment
     },
     {
       path: '*',

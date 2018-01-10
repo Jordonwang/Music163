@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="overflow: hidden">
     <img id="bg" :src="songImg" alt="">
     <div id="bg2"></div>
     <header>
@@ -7,15 +7,21 @@
       <span>{{songName}}</span>
     </header>
     <div class="main">
-      <div class="songPic">
-        <div class="outpic">
-          <div class="innerpic">
-              <img @click="isplay" :src="songImg" alt="">
-              <div @click="isplay"></div>
+      <transition name="fade">
+        <div class="songPic" v-show="!showlyric">
+          <div class="outpic" :style="'height:'+outpicWidth+'px'">
+            <div class="innerpic" @click="showlyric = !showlyric">
+                <img :src="songImg" alt="img">
+                <div></div>
+            </div>
           </div>
         </div>
+      </transition>
+      <div class="lyric animated fadeInUp" v-show="showlyric" @click="showlyric = !showlyric">
+        <p v-if="lyric.length>0" v-for="lyr in lyric">{{lyr}}</p>
+        <p v-if="lyric.length==0">轻音乐，暂无歌词</p>
       </div>
-      <div class="more">
+      <div class="more" v-show="!showlyric">
         <ul>
           <li><img src="/static/heart.png" alt=""></li>
           <li><img src="/static/dwn.png" alt=""></li>
@@ -24,21 +30,19 @@
         </ul>
       </div>
       <div class="process">
-      	<span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
-      	<div><span id="process" :style="'width:'+processWidth+'%'"><i @touchend="ctrlProgressEnd" @touchstart="ctrlProgress"></i></span></div>
-      	<span v-text="totalT" v-if="totalT=='NaN:NaN'?totalT='00:00':totalT">00:00</span>
+        <span v-text="startT" v-if="startT=='NaN:NaN'?startT='00:00':startT">00:00</span>
+        <div><span id="process" :style="'width:'+processWidth+'%'"><i @touchend="ctrlProgressEnd" @touchstart="ctrlProgress"></i></span></div>
+        <span v-text="totalT" v-if="totalT=='NaN:NaN'?totalT='00:00':totalT">00:00</span>
       </div>
-      <div class="setting">
-      	<ul>
-      		<li><img src="/static/orderloop.png" alt=""></li>
-      		<li @click="prevSong"><img src="/static/left-arrow.png" alt=""></li>
-      		<li @click="isplay"><img id="pused" src="/static/pused.png" alt=""></li>
-      		<li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
-      		<li><img src="/static/menu.png" alt=""></li>
-      	</ul>
-      </div>
-      <img src="/static/cyc.png" alt="">
-      <span></span>
+      <ul class="setting">
+        <li><img src="/static/orderloop.png" alt=""></li>
+        <li @click="prevSong"><img src="/static/left-arrow.png" alt=""></li>
+        <li @click="isplay"><img id="pused" src="/static/pused.png" alt=""></li>
+        <li @click="nextSong"><img src="/static/right-arrow.png" alt=""></li>
+        <li><img src="/static/menu.png" alt=""></li>
+      </ul>
+      <img src="/static/cyc.png" alt="" v-show="!showlyric">
+      <span v-show="!showlyric"></span>
     </div>
 	  <type-loading v-if="loading"></type-loading>
     <router-view></router-view>
@@ -64,7 +68,10 @@
         audio:false,
         isPlaying:true,
         playingSrc:'',
-        curTime:0
+        curTime:0,
+        showlyric:false,
+        outpicWidth:'',
+        lyric:[]
       }
     },
     computed:{
@@ -104,8 +111,7 @@
     },
     mounted(){
       this.initData(this.id);
-      var outpicWidth = document.querySelector('.outpic').clientWidth
-      document.querySelector('.outpic').style.height = outpicWidth + 'px'
+      this.outpicWidth = document.querySelector('.outpic').clientWidth
 
       for (var i = 0;i<this.songlist.length;i++) {
       	if(this.id == this.songlist[i].id){
@@ -161,9 +167,17 @@
         route.goBack()
       },
       initData(id){
+        var _this = this;
         this.GetSongUrl(id)
         this.GetSongDetail(id)
-        let songlyric = getSonglyric(id)
+        getSonglyric(id).then(function (res) {
+          if(res.qfy || res.sfy){
+            // _this.lyric = '轻音乐，无歌词'
+          }else{
+            let r = res.lrc.lyric.split(/\[[^\]]*\]/)
+            _this.lyric = r
+          }
+        })
         this.UPDATE_ISPLAYING(true)
         this.hideLoading();
       },
@@ -171,6 +185,10 @@
       nextSong(){
 
         let index = this.currentSongListIndex
+        if(this.songlist.length<1){
+          this.$dialog.toast({mes:'暂无播放列表',timeout: 1500})
+          return
+        }
         if(index == this.songlist.length-1){
             index = 0
         }
@@ -181,6 +199,10 @@
       },
       //上一首
       prevSong(){
+        if(this.songlist.length<1){
+          this.$dialog.toast({mes:'暂无播放列表',timeout: 1500})
+          return
+        }
         let index = this.currentSongListIndex
         if(index==0){
           index = this.songlist.length
@@ -279,12 +301,20 @@
     margin-top: 5px;
     margin-left: 5px;
   }
+  header>span{
+    width: 50%;
+    overflow: hidden;
+    display: inline-block;
+    height: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   #bg{
     position: fixed;
     z-index:-2;
     filter: blur(100px);
     width: 100%;
-    height: 100%;
+    height: 100%
   }
   #bg2{
     position: fixed;
@@ -372,6 +402,10 @@
   	align-items: center;
     padding: 0 16px;
     margin: 4% 0;
+    position: fixed;
+    width: 100%;
+    bottom: 1.5rem;
+    left: 0;
   }
   .process>span{
     font-size:12px;
@@ -427,7 +461,8 @@
   .more>ul>li>img{
   	width: 45%
   }
-  .setting>ul{
+  ul.setting{
+    height: 1rem;
   	display: flex;
     justify-content: space-around;
     list-style: none;
@@ -437,10 +472,34 @@
     align-items: center;
     z-index: 2;
   }
-  .setting>ul>li{
+  ul.setting>li{
     text-align: center;
   }
-  .setting>ul>li>img{
+  ul.setting>li>img{
 	  width: 45%
+  }
+  .lyric{
+    text-align: center;
+    color: #fff;
+    height: 9rem;
+    /*animation: showlyc 1s linear;*/
+    animation-delay:1s;
+    overflow: scroll;
+  }
+  @keyframes showlyc {
+    0%{
+      /*transform: translateY(100%);*/
+      opacity: 0;
+    }
+    100%{
+      /*transform: translateY(0%);*/
+      opacity: 1;
+    }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
+    opacity: 0
   }
 </style>
